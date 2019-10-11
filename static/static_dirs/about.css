@@ -1,4 +1,4 @@
-.nav-link{
+/*.nav-link{
     color: black;
 }
 .dustinstest{
@@ -10,8 +10,13 @@
 .dormant{
 	color:red;
 }
+*/
 
-
-.nav-rtl {
+/*.nav-rtl {
     float:right;
 }
+
+.ml-auto .dropdown-menu {
+      left: auto !important;
+      right: 0px;
+    }*/
