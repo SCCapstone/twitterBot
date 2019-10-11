@@ -1,9 +1,17 @@
 .nav-link{
     color: black;
 }
-.nav-link2{
+.dustinstest{
     color: red;
 }
 .active{
 	color:red;
+}
+.dormant{
+	color:red;
+}
+
+
+.nav-rtl {
+    float:right;
 }

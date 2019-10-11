@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-import matplotlib.pyplot as plt
-from django.http import HttpResponse
-from matplotlib.figure import Figure
-import numpy as np
+# import matplotlib.pyplot as plt
+# from django.http import HttpResponse
+# from matplotlib.figure import Figure
+# import numpy as np
 
 # Create your views here.
 class HomePageView(TemplateView):
@@ -15,22 +15,22 @@ class AboutPageView(TemplateView):
 class IndexPageView(TemplateView):
 	template_name = 'index.html'
 
-def plot(request):
-    # Data for plotting
-    t = np.arange(0.0, 2.0, 0.01)
-    s = 1 + np.sin(2 * np.pi * t)
+# def plot(request):
+#     # Data for plotting
+#     t = np.arange(0.0, 2.0, 0.01)
+#     s = 1 + np.sin(2 * np.pi * t)
 
-    fig, ax = plt.subplots()
-    ax.plot(t, s)
+#     fig, ax = plt.subplots()
+#     ax.plot(t, s)
 
-    ax.set(xlabel='time (s)', ylabel='voltage (mV)',
-           title='About as simple as it gets, folks')
-    ax.grid()
+#     ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+#            title='About as simple as it gets, folks')
+#     ax.grid()
 
-    response = HttpResponse(content_type = 'image/png')
-    canvas = FigureCanvasAgg(fig)
-    canvas.print_png(response)
-    return response
+#     response = HttpResponse(content_type = 'image/png')
+#     canvas = FigureCanvasAgg(fig)
+#     canvas.print_png(response)
+#     return response
 
 
 

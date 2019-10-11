@@ -19,6 +19,4 @@ import pages.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pages.urls')),
-    path('test', views.plot())
-]
+    path('', include('pages.urls')),]
