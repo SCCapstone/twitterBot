@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "771c76e5b582b7fa3903cc4323019141e2644e41d2785ceab7555c935890553d"
+            "sha256": "6733aaf9aa3376d2d6a76d27d1ecf1e01eb8d1613ebd6210a9d50c161b5475d2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -37,6 +37,13 @@
             ],
             "index": "pypi",
             "version": "==2.2.6"
+        },
+        "firebase": {
+            "hashes": [
+                "sha256:39f7a149bef90735a17fddda30cab3cb24b03e40ab221c12e1217ff0cfd38203"
+            ],
+            "index": "pypi",
+            "version": "==3.0.1"
         },
         "gunicorn": {
             "hashes": [

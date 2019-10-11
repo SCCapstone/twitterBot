@@ -11,6 +11,7 @@ gunicorn = "==19.9.0"
 whitenoise = "*"
 textblob = "==0.15.2"
 heroku = "*"
+firebase = "*"
 
 [requires]
 python_version = "3.6"

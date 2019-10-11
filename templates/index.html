@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+ <div class="topnav">
+  <a class="active" href="#home">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="about.html">About</a>
+</div> 
+<head>
+	<title>My Page</title>
+	<link rel="stylesheet" type="text/css" href="index.css">.
+</head>
+
+{% block content %}
+<h1>Home Page</h1>
+{% endblock content %}
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+{% csrf_token %}
+Welcome {{e}}
+</body>
+</html>
