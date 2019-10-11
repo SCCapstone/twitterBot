@@ -20,5 +20,5 @@ import pages.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('pages.urls'))
-    url('mplimage.png', mpl.views.mplimage),
+    url('mplimage.png', pages.views.mplimage),
 ]
