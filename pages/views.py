@@ -31,7 +31,7 @@ def bokeh(request):
     plot.line(x, y, line_width = 2)
     #store components
     script, div = components(plot)
-    return render_to_response( 'index.html', {'resources' : INLINE.render(), 'script': script, 'div': div})
+    return render_to_response( 'bokeh.html', {'resources' : INLINE.render(), 'script': script, 'div': div})
 
 # def plot(request):
 #     # Data for plotting
