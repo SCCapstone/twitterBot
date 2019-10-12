@@ -1,13 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 from .forms import CustomUserCreationForm
-# import matplotlib.pyplot as plt
-# from django.http import HttpResponse
-# from matplotlib.figure import Figure
-# import numpy as np
+from bokeh.plotting import figure, output_file, show 
+from bokeh.embed import components
+from bokeh.resources import INLINE
 
 # Create your views here.
 class HomePageView(TemplateView):
@@ -23,6 +22,16 @@ class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
+
+def bokeh(request):
+    x, y, = [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]
+    #Setup graph plot
+    plot = figure(title = 'Line Chart', x_axis_label = 'X axis', y_axis_label = 'Y axis', plot_width = 400, plot_height = 400)
+    #plot line
+    plot.line(x, y, line_width = 2)
+    #store components
+    script, div = components(plot)
+    return render_to_response( 'index.html', {'resources' : INLINE.render(), 'script': script, 'div': div})
 
 # def plot(request):
 #     # Data for plotting

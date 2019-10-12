@@ -7,4 +7,5 @@ urlpatterns = [
 	path('', HomePageView.as_view(), name = 'home'),
 	path('index/', IndexPageView.as_view(), name = 'index'),
 	path('signup/', views.SignUp.as_view(), name='signup'),
+	path('bokeh/', views.bokeh, name='bokeh'),
 ]
