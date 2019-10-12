@@ -39,7 +39,6 @@
       <a class="dropdown-item" href="{% url 'password_reset' %}">Forgot Password?</a>
       <a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a>
       {% endif %}
-
     </div>
   </li>
 </ul>
@@ -47,8 +46,8 @@
 <head>
   <link href="{% static 'home.css' %}" rel="stylesheet"/>
 </head>
-<h1>Test</h1>
+<h1><a href="{% url 'bokeh' %}">Bokeh Example</a></h1>
 <h1>HomePage</h1>
 <h2 a>big test</h2 a>
-  
+
 {% endblock content %}
