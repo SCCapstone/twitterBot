@@ -23,7 +23,7 @@
       {% if user.is_authenticated %}
       <a class="dropdown-item" href="{% url 'logout' %}"><img src="https://icons-for-free.com/iconfiles/png/512/check+exit+log+off+logout+quit+sign+out+icon-1320183951265704602.png" alt="" height="25" width ="25"> Sign Out</a>
       {% else %}
-      <a class="dropdown-item" href="{% url 'login' %}"><img src="https://i.ibb.co/5ctJf4W/check-exit-log-off-logout-quit-sign-out-icon-1320183951265704602.png" alt="" height="25" width ="25"> Sign In</a>
+      <a class="dropdown-item" href="{% url '' %}"><img src="https://i.ibb.co/5ctJf4W/check-exit-log-off-logout-quit-sign-out-icon-1320183951265704602.png" alt="" height="25" width ="25"> Sign In</a>
       <a class="dropdown-item" href="{% url 'password_reset' %}">Forgot Password?</a>
       <a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a>
       {% endif %}
