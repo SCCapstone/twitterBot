@@ -46,8 +46,26 @@
 <head>
   <link href="{% static 'home.css' %}" rel="stylesheet"/>
 </head>
-<h1><a href="{% url 'bokeh' %}">Bokeh Example</a></h1>
-<h1>HomePage</h1>
-<h2 a>big test</h2 a>
+<h1><div id="search">Search!</div></h1>
+<form id="frm1" action="/bokeh">
+  <div class="input-group container">
+      <input class="form-control" type="text" name="search" placeholder="Enter search keyword or phrase"><br>
+      <button class="btn btn-primary" onclick="searchRetrieve()">Search</button>
+  </div>
+</form>
+<p><a href="{% url 'bokeh' %}">Bokeh Example </a></p>
+<p id="demo">Search terms pops up here</p>
+<script>
+function searchRetrieve() {
+  var x = document.getElementById("frm1");
+  var text = "";
+  var i;
+  for (i = 0; i < x.length ;i++) {
+    text += x.elements[i].value + "<br>";
+  }
+  document.getElementById("demo").innerHTML = text;
+}
+</script>
+<h1><a href="#"></a></h1>
 
 {% endblock content %}

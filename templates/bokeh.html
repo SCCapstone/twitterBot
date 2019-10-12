@@ -42,8 +42,13 @@
     </div>
   </li>
 </ul>
-<h1>Bokeh Testing</h1>
+<h1>You searched: </h1> <h2 id="demo"></h2>
         {{ div | safe }}
         {{ script | safe }}
     </body>
+
+   <script>
+   	split = window.location.search.split('=');
+	document.getElementById("demo").innerHTML = split[1];
+</script>
 </html>
