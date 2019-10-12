@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+import plotly.graph_objects as go
+fig = go.Figure(data=go.Bar(y=[2,3,1]))
+fig.write_html('first_figure.html', auto_open=True)
+{% load static %}
+<head>
+	<link href="{% static 'index.css' %}" rel="stylesheet"/>
+</head>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+        <h1>Django Bootstrap 4 Tutorial</h1>
+          <p>Welcome to our Django Home Page</p>
+        </div>
+    </div>  
+</div>
+
+
+{% endblock %}
