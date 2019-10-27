@@ -10,7 +10,7 @@ We are building a twitter data-scraping software that will fetch tweets based on
   python manage.py runserver
   
 ### Deployment:
-
+  Undecided
 
 ### Testing:
   N/A
@@ -18,6 +18,6 @@ We are building a twitter data-scraping software that will fetch tweets based on
 ### Authors:
   1. Joey O'Neill jtoneill@email.sc.edu
   2. Dustin Squires squireso@email.sc.edu
-  3.
+  3. David De Maria ddemaria@email.sc.edu
   4.
   5.
