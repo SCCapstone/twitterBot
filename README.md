@@ -17,7 +17,7 @@ We are building a twitter data-scraping software that will fetch tweets based on
   
 ### Authors:
   1. Joey O'Neill jtoneill@email.sc.edu
-  2. Joey O'Neill
+  2. Dustin Squires squireso@email.sc.edu
   3.
   4.
   5.

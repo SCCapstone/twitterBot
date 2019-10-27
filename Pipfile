@@ -11,4 +11,7 @@ gunicorn = "==19.9.0"
 bokeh = "==1.3.4"
 
 [requires]
-python_version = "3.5"
+# Pipenv doesn't allow multiple versions of
+# python requirements. So we have temporarily
+# removed this requirement. We are using python versions
+# 3.5 or later ststed in the readme.
