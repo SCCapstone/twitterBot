@@ -5,12 +5,15 @@ We are building a twitter data-scraping software that will fetch tweets based on
   1. Python 3.6
   2. Django 2.2.6
   3. Bokeh 1.4.3
+  4. Tweepy 3.8.0
+  5. TextBlob 0.15.3
+  6. NLTK 3.4.5
  
 ### Running:
   python manage.py runserver
   
 ### Deployment:
-  Heroku
+  Undecided 
 
 ### Testing:
   N/A
