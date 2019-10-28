@@ -19,5 +19,5 @@ We are building a twitter data-scraping software that will fetch tweets based on
   1. Joey O'Neill jtoneill@email.sc.edu
   2. Dustin Squires squireso@email.sc.edu
   3. David De Maria ddemaria@email.sc.edu
-  4.
+  4. Michael Miller mam22@email.sc.edu
   5.
