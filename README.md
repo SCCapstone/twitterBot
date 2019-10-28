@@ -10,7 +10,7 @@ We are building a twitter data-scraping software that will fetch tweets based on
   python manage.py runserver
   
 ### Deployment:
-  Undecided
+  Heroku
 
 ### Testing:
   N/A
