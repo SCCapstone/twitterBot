@@ -1,80 +1,84 @@
 from django.shortcuts import render, render_to_response
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
-from .forms import CustomUserCreationForm
-from bokeh.plotting import figure, output_file, show 
+from .forms import CustomUserCreationForm, SearchForm
+from bokeh.layouts import column
+from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 from bokeh.resources import INLINE
+import random, tweepy
 
-# Create your views here.
-class HomePageView(TemplateView):
-	template_name = 'home.html'
+# create views here
+class HomeView(View):
 
-class AboutPageView(TemplateView):
-	template_name = 'about.html'
+    #auth = tweepy.OAuthHandler("consumer key", "consumer sevret")
+    #auth.set_acces_token("access token", "access token secret")
+    #api = tweepy.API(auth)
+    #user = api.get_user("matt_man_03")
 
-class IndexPageView(TemplateView):
-	template_name = 'index.html'
+    def get(self, request, *args, **kwargs):
+        submitbutton = request.POST.get("submit")
+        form = SearchForm(request.POST or None)
+    	#this is the search action event
+        if form.is_valid():
+            search = form.cleaned_data.get("search")
+            context = {
+                'form': form,
+                'search': search,
+                'screen_name': user.screen_name,
+            }
+            #this is where tweepy methods and nlp will be done
+
+            #redirect the user to the results page
+            return render(request, 'bokeh.html', context)
+        else:
+            search = SearchForm()
+
+        context = {
+            'search_form': search,
+            'status0': 'active',
+        }
+        #return the home page with search bar and posts to the html file
+        return render(request, 'home.html', context)
+
+class AboutView(View):
+    def get(self, request, *args, **kwargs):
+        context = {
+            'title': 'About',
+            'status1': 'active',
+        }
+        status = 'active'
+        return render(request, 'about.html', context)
 
 class SignUp(generic.CreateView):
+    #define variables here
+    #define methods here
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
-def bokeh(request):
-    x, y, = [1, 2, 3, 4, 5], [1, 2, 3, 4, 5]
-    #Setup graph plot
-    plot = figure(title = 'Line Chart', x_axis_label = 'X axis', y_axis_label = 'Y axis', plot_width = 400, plot_height = 400)
-    #plot line
-    plot.line(x, y, line_width = 2)
-    #store components
-    script, div = components(plot)
-    return render_to_response( 'bokeh.html', {'resources' : INLINE.render(), 'script': script, 'div': div})
-
-# def plot(request):
-#     # Data for plotting
-#     t = np.arange(0.0, 2.0, 0.01)
-#     s = 1 + np.sin(2 * np.pi * t)
-
-#     fig, ax = plt.subplots()
-#     ax.plot(t, s)
-
-#     ax.set(xlabel='time (s)', ylabel='voltage (mV)',
-#            title='About as simple as it gets, folks')
-#     ax.grid()
-
-#     response = HttpResponse(content_type = 'image/png')
-#     canvas = FigureCanvasAgg(fig)
-#     canvas.print_png(response)
-#     return response
-
-
-
-# def mplimage(request):
-#     fig = Figure()
-#     canvas = FigureCanvas(fig)
-#     ax = fig.add_subplot(111)
-#     x = np.arange(-2,1.5,.01)
-#     y = np.sin(np.exp(2*x))
-#     ax.plot(x, y)
-#     response=django.http.HttpResponse(content_type='image/png')
-#     canvas.print_png(response)
-#     return response
-
-
-# def test_matplotlib(request):
-#     f = figure(1, figsize=(6,6))
-#     ax = axes([0.1, 0.1, 0.8, 0.8])
-#     labels = 'Frogs', 'Hogs', 'Dogs', 'Logs'
-#     fracs = [15,30,45, 10]
-#     explode=(0, 0.05, 0, 0)
-#     pie(fracs, explode=explode, labels=labels, autopct='%1.1f%%', shadow=True)
-#     title('Raining Hogs and Dogs', bbox={'facecolor':'0.8', 'pad':5})
-
-#     canvas = FigureCanvasAgg(f)    
-#     response = HttpResponse(content_type='image/png')
-#     canvas.print_png(response)
-#     matplotlib.pyplot.close(f)
-#     return response
+class ResultsView(View):
+    #define variables here
+    #define methods here
+    def get(self, request, *args, **kwargs):
+        x_coord = []
+        y_coord = []
+        #randomly generated x coord and y coord
+        for i in range(100):
+            x_coord.append(random.randint(0,50))
+            y_coord.append(random.randint(0,50))
+        plot = figure(title='Test Scatter',x_axis_label='X-axis',y_axis_label='Y-axis',plot_width=400,plot_height=400,sizing_mode='scale_width')
+        plot.scatter(x_coord,y_coord)
+        #Line Graph
+        x1 = [1,2,3,4,5]
+        y1 = [1,2,3,4,5]
+        plot1 = figure(title='Test Line',x_axis_label='X-axis',y_axis_label='Y-axis',plot_width=400,plot_height=400,sizing_mode='scale_width')
+        plot1.line(x1,y1,line_width=2)
+        #set the graphs up in column form on the page
+        #and allow for the width the be scalable by the page
+        col = column([plot,plot1],sizing_mode='scale_width')
+        script, div = components(col)
+        #return script, div, and the title: Bench to the html bench page
+        return render(request, 'bokeh.html', {'resources': INLINE.render(), 'title': 'Results', 'script': script, 'div': div})

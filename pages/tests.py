@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase
+Pagesfrom django.test import SimpleTestCase
 from django.test import TestCase
 # Create your tests here.
 
