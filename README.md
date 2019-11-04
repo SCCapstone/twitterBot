@@ -4,13 +4,17 @@ We are building a twitter data-scraping software that will fetch tweets based on
 ### Technologies:
   1. Python 3.6
   2. Django 2.2.6
-  3. Bokeh 1.4.3
+  3. Bokeh 1.3.4
+  4. Gunicorn 19.9.0
+  5. Tweepy 3.8.0
+  6. TextBlob 0.15.3
+  7. NLTK 3.4.5
  
-### Running:
-  python manage.py runserver
+### Running (locally):
+  python manage.py runserver 
   
 ### Deployment:
-
+  heroku
 
 ### Testing:
   N/A
@@ -18,6 +22,11 @@ We are building a twitter data-scraping software that will fetch tweets based on
 ### Authors:
   1. Joey O'Neill jtoneill@email.sc.edu
   2. Dustin Squires squireso@email.sc.edu
-  3.
+  3. David De Maria ddemaria@email.sc.edu
   4.
   5.
+  
+### Style:
+  We are following the Django style guide which follows the PEP 8 style guide for python as well.  
+  Django Styleguide: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
+  Python Styleguide: https://www.python.org/dev/peps/pep-0008/
