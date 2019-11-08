@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-  <!-- this is the action from the search bar -->
+  
+  <!-- colums divide page in 3 parts -->
+  <div class="row">
 
-  <form type="get" action="bokeh/" style="margin: 0">
-    {% csrf_token %}
-    <input  id="search" type="text" name="search"  placeholder="Type Keyword Here" >
-    <button id="search_submit" type="submit" >Submit</button>
-  </form>
+  	<!-- Left column -->
+    <div class="col-sm-3"></div>
 
+    <!-- middle main column -->
+    <div class="col-sm-6" style="">
+
+      <!-- header temporary holder for logo-->
+      <h1 style="text-align: center; padding-top: 150px"> tweetBot </h1>
+
+      <!-- Search bar form -->
+      <form type="get" action="bokeh/" style="margin: 0; text-align: center;">
+        {% csrf_token %}
+        <input  id="search" type="text" name="search" placeholder="Search" class="form-control mr-sm-0">
+        <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-1" style="padding-bottom: 2px; padding-top: 2px">Search</button>
+      </form>
+    </div>
+
+    <!-- Right column-->
+    <div class="col-sm-3"></div>
+  </div>
 
 {% endblock content %}
