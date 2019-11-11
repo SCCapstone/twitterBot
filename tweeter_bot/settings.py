@@ -82,7 +82,6 @@ WSGI_APPLICATION = 'tweeter_bot.wsgi.application'
 # https://warehouse.python.org/project/whitenoise/
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
