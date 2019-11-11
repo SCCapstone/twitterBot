@@ -16,7 +16,7 @@
 	<script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-1.3.4.min.js"></script>
 
 	<!-- linking static css file -->
-	<link rel="stylesheet" type="text/css" href="{% static 'static/static_dirs/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static '/static_root/main.css' %}">
 
 	<!-- Default title with optional input returned from views -->
 	{% if title %}
@@ -27,7 +27,7 @@
 
 	<!-- Navbar List -->
 	<ul class="nav nav-tabs justify-content-end">
-		
+
 		<!-- Nav bar logo -->
 		<li class="nav-item mr-auto">
 			<a class="navbar-brand ml-sm-1" href="#">
@@ -80,7 +80,7 @@
 		<!-- this is for the graph -->
 	  {{ resources | safe }}
 	</header>
-	
+
 	<!-- content block -->
 	<main role="main" class="container">
 		<div class="row">
