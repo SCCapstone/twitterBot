@@ -1,0 +1,13 @@
+.input {
+	width:100%;
+}
+.container{
+  width: 400px;
+}
+h1, h2 a {
+  color: red;
+}
+.active {
+	color: black;
+	border: black;
+}
