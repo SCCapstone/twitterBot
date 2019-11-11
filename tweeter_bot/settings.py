@@ -81,7 +81,8 @@ WSGI_APPLICATION = 'tweeter_bot.wsgi.application'
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
+    'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 
