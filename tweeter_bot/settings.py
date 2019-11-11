@@ -71,12 +71,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tweeter_bot.wsgi.application'
 
-# Simplified static file serving.
-# https://warehouse.python.org/project/whitenoise/
-
-STATICFILES_STORAGE = 'whitenoise.storage.GzipManifestStaticFilesStorage'
-
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
