@@ -124,7 +124,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'live_static', 'static_root')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
 
 
 LOGIN_REDIRECT_URL = 'home'
