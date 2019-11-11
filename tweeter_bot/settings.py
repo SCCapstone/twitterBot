@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 STATIC_URL = '/static/'
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
@@ -77,6 +77,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tweeter_bot.wsgi.application'
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+
+MIDDLEWARE_CLASSES = (
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+)
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Database
