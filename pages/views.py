@@ -54,10 +54,11 @@ class AboutView(View):
 
 class SignUp(generic.CreateView):
     #define variables here
-    #define methods here
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
+
+    #define methods here
 
 class ResultsView(View):
     #define variables here
