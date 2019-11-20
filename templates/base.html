@@ -61,7 +61,7 @@
 
 			<!-- Profile Icon-->
 			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-				<img src="https://i.ibb.co/jGJMs0d/profile.png" alt="" height="25" width ="25">{{user.username}}
+				<img src="https://i.ibb.co/jGJMs0d/profile.png" alt="" height="25" width ="25"> {{user.username}}
 			</a>
 
 			<!-- Profile Button Dropdown tab -->
@@ -79,25 +79,23 @@
 		</li>
 	</ul>
 
-		<!-- this is for the graph -->
+	  <!-- this is for the graph -->
 	  {{ resources | safe }}
 	</header>
 
 	<!-- content block -->
-	<main role="main" class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<!-- Allows for flash messages -->
-				{% if messages %}
-					{% for message in messages %}
-						<div class="alert alert-{{ message.tags }}">
-							{{ message }}
-						</div>
-					{% endfor %}
-				{% endif %}
 
-				<!-- Content Block Base -->
-				{% block content %}{% endblock  %}
+	<!-- Allows for flash messages -->
+	{% if messages %}
+		{% for message in messages %}
+			<div class="alert alert-{{ message.tags }}">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+
+	<!-- Content Block Base -->
+	{% block content %}{% endblock  %}
 				
 	  	</div>
 		</div>

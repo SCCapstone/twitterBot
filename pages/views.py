@@ -20,14 +20,13 @@ class HomeView(View):
 
     def get(self, request, *args, **kwargs):
         submitbutton = request.POST.get("submit")
-        form = SearchForm(request.POST or None)
+        form = SearchForm(request.POST)
     	#this is the search action event
         if form.is_valid():
             search = form.cleaned_data.get("search")
             context = {
                 'form': form,
-                'search': search,
-                'screen_name': user.screen_name,
+                'search': search
             }
             #this is where tweepy methods and nlp will be done
 
