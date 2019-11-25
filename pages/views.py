@@ -11,6 +11,13 @@ from bokeh.resources import INLINE
 import random, tweepy
 
 # create views here
+class ProfileView(View):
+    def get(self, request, *args, **kwargs):
+        context = {
+
+        }
+        return render(request,'profile.html',context)
+
 class HomeView(View):
 
     #auth = tweepy.OAuthHandler("consumer key", "consumer sevret")

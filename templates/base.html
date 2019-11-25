@@ -67,7 +67,7 @@
 			<!-- Profile Button Dropdown tab -->
 			<div class="dropdown-menu dropdown-menu-right">
 				{% if user.is_authenticated %}
-				<a class="dropdown-item" href="#"><img src="https://icon-library.net/images/icon-profile/icon-profile-5.jpg" alt="" height="25" width ="25"> View Profile </a>
+				<a class="dropdown-item" href="{% url 'profile' %}"><img src="https://icon-library.net/images/icon-profile/icon-profile-5.jpg" alt="" height="25" width ="25"> View Profile </a>
 				<div class="dropdown-divider"></div>
 				<a class="dropdown-item" href="{% url 'logout' %}"><img src="https://icons-for-free.com/iconfiles/png/512/check+exit+log+off+logout+quit+sign+out+icon-1320183951265704602.png" alt="" height="25" width ="25"> Sign Out </a>
 				{% else %}
