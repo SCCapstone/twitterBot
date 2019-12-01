@@ -1,6 +1,8 @@
 from django.shortcuts import render, render_to_response
 from django.views.generic import TemplateView, View
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views import generic
 from .forms import CustomUserCreationForm, SearchForm
@@ -11,8 +13,9 @@ from bokeh.resources import INLINE
 import random, tweepy
 
 # create views here
+@method_decorator(login_required, name='dispatch')
 class ProfileView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         context = {
 
         }
