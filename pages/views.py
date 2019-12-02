@@ -16,34 +16,55 @@ class HomeView(View):
     #auth = tweepy.OAuthHandler("consumer key", "consumer sevret")
     #auth.set_acces_token("access token", "access token secret")
     #api = tweepy.API(auth)
-    #user = api.get_user("matt_man_03")
 
+    #get method decides weather to transition
+    #to results or stay on the home page
     def get(self, request, *args, **kwargs):
-        submitbutton = request.POST.get("submit")
-        form = SearchForm(request.POST or None)
-    	#this is the search action event
+
+        form = SearchForm(request.POST)
         if form.is_valid():
-            search = form.cleaned_data.get("search")
+            search_data = form.cleaned_data['search']
             context = {
-                'form': form,
-                'search': search,
-                'screen_name': user.screen_name,
+                'title': 'Results',
+                'form': search_data,
             }
-            #this is where tweepy methods and nlp will be done
-
-            #redirect the user to the results page
             return render(request, 'bokeh.html', context)
-        else:
-            search = SearchForm()
 
-        context = {
-            'search_form': search,
-            'status0': 'active',
-        }
-        #return the home page with search bar and posts to the html file
-        return render(request, 'home.html', context)
+            # try:
+            #     user = Person.objects.get(name = search_id)
+            #     #do something with user
+            #     html = ("<H1>%s</H1>", user)
+            #     return HttpResponse(html)
+            # except Person.DoesNotExist:
+            #     return HttpResponse("no such user")  
+        else:
+
+            context = {
+                'title': 'Home',
+                'status0': 'active',
+            }
+            return render(request, 'home.html', context)
+
+
+        # form = SearchForm(request.POST)
+        # if form.is_valid():
+        #     search = form.cleaned_data
+        #     return render(request,'bokeh.html',search)
+        # else:
+        #     form = SearchForm()
+
+        # #containing items to be returned to html 
+        # context = {
+        #     'title': 'Home',
+        #     'status0': 'active',
+        # }
+
+        # return render(request, 'home.html', context)
+
+
 
 class AboutView(View):
+
     def get(self, request, *args, **kwargs):
         context = {
             'title': 'About',
@@ -53,32 +74,62 @@ class AboutView(View):
         return render(request, 'about.html', context)
 
 class SignUp(generic.CreateView):
-    #define variables here
-    #define methods here
+
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
 class ResultsView(View):
-    #define variables here
-    #define methods here
+
+    #get method for generating the graph display
     def get(self, request, *args, **kwargs):
+
+        #randomly generated x coord and y coord
         x_coord = []
         y_coord = []
-        #randomly generated x coord and y coord
         for i in range(100):
             x_coord.append(random.randint(0,50))
             y_coord.append(random.randint(0,50))
-        plot = figure(title='Test Scatter',x_axis_label='X-axis',y_axis_label='Y-axis',plot_width=400,plot_height=400,sizing_mode='scale_width')
+
+        #create scatter plot for figure 1
+        plot = figure(
+            title='Test Scatter',
+            x_axis_label='X-axis',
+            y_axis_label='Y-axis',
+            plot_width=400,
+            plot_height=400,
+            sizing_mode='scale_width'
+            )
+
         plot.scatter(x_coord,y_coord)
-        #Line Graph
+
+        #define line graph coords
         x1 = [1,2,3,4,5]
         y1 = [1,2,3,4,5]
-        plot1 = figure(title='Test Line',x_axis_label='X-axis',y_axis_label='Y-axis',plot_width=400,plot_height=400,sizing_mode='scale_width')
+
+        #plot as line graph figure 2
+        plot1 = figure(
+            title='Test Line',
+            x_axis_label='X-axis',
+            y_axis_label='Y-axis',
+            plot_width=400,
+            plot_height=400,
+            sizing_mode='scale_width'
+            )
         plot1.line(x1,y1,line_width=2)
-        #set the graphs up in column form on the page
-        #and allow for the width the be scalable by the page
+
+        #assign both craphs to a column structure
         col = column([plot,plot1],sizing_mode='scale_width')
+
         script, div = components(col)
-        #return script, div, and the title: Bench to the html bench page
-        return render(request, 'bokeh.html', {'resources': INLINE.render(), 'title': 'Results', 'script': script, 'div': div})
+
+        #containing items to be returned to html 
+        context = {
+            'resources': INLINE.render(),
+            'title': 'Results',
+            'script': script, 
+            'div': div
+        }
+
+        #return request with correct html along wiht context
+        return render(request,'bokeh.html',context)

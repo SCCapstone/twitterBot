@@ -2,10 +2,10 @@
 	width:100%;
 }
 .container{
-  width: 400px;
+	width: 500px;
 }
 h1, h2 a {
-  color: black;
+  	color: black;
 }
 .active {
 	color: black;

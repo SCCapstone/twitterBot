@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  <!-- This shows what the user searched -->
-  {% if submitbutton == "submit" %}
-    {{ context }}
-  {% endif %}
 
-  <!-- This is for the graph display  -->
+  <!--  This shows what the user searched -->
+ <!-- <script>
+   	split = window.location.search.split('=');
+	document.getElementById("demo").innerHTML = split[2];
+</script>
+<h1>You searched: </h1> <h2 id="demo"></h2> -->
+
+<h1>{{ form }}</h1>
+
+  <!--  This is for the graph display  -->
   {{ div | safe }}
   {{ script | safe }}
 
