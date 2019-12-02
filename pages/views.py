@@ -60,6 +60,21 @@ class HomeView(View):
                 tweet_TB = TextBlob(tweet_list[i])
                 sentiment_dict[tweet_list[i]] = tweet_TB.sentiment.polarity
 
+            # For Polarity Pie Chart
+            pos = 0
+            neg = 0
+            neutral = 0
+            for n in sentiment_dict.values():
+                if (n == 0.0):
+                    ++neutral
+                elif (n > 0):
+                    ++pos
+                else:
+                    ++neg
+
+            polar_dict = {'positive':pos, 'negative':neg, 'neutral':neutral}
+
+
             context = {
                 'title': 'Results',
                 'text': text,
