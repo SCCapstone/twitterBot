@@ -13,11 +13,18 @@
       <!-- header temporary holder for logo-->
       <h1 style="text-align: center; padding-top: 150px"> tweetBot </h1>
 
-      <form type="get" action="bokeh/" style="margin: 0; text-align:center;">
+      <form method="post" style="margin: 0; text-align:center;">
         {% csrf_token %}
+        {{ form.as_p }}
+         <button type="submit" style="padding-bottom: 2px; padding-top: 2px">Search</button>
+      </form>
+
+<!--       <form type="get" action="bokeh/" style="margin: 0; text-align:center;">
+        {% csrf_token %}
+        {{ form.as_p }}
         <input id="search" type="text" name="search">
         <button id="search_button" type="submit" class="btn aqua-gradient btn-rounded btn sm my-sm-1" style="padding-bottom: 2px; padding-top: 2px">Search</button>
-      </form>
+      </form> -->
 
 
       <!-- Search bar html -->

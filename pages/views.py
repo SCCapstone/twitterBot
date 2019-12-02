@@ -1,5 +1,5 @@
-from django.shortcuts import render, render_to_response
-from django.views.generic import TemplateView, View
+from django.shortcuts import render, render_to_response, redirect
+from django.views.generic import TemplateView, View, CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
@@ -11,61 +11,52 @@ from bokeh.resources import INLINE
 import random, tweepy
 
 # create views here
-class HomeView(View):
-
-    #auth = tweepy.OAuthHandler("consumer key", "consumer sevret")
-    #auth.set_acces_token("access token", "access token secret")
-    #api = tweepy.API(auth)
+class HomeView(TemplateView):
 
     #get method decides weather to transition
     #to results or stay on the home page
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
+        form = SearchForm()
+        context = {
+            'title': 'Home',
+            'status0': 'active',
+            'form': form,
+        }
+        return render(request, 'home.html', context)
+
+    def post(self, request):
 
         form = SearchForm(request.POST)
         if form.is_valid():
-            search_data = form.cleaned_data['search']
+            text = form.cleaned_data['search']
+
+            #need to move this chunk of code
+            auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
+            auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
+            api = tweepy.API(auth)
+            tweet_list = []
+            for tweet_info in tweepy.Cursor(
+                    api.search,
+                    q = text,
+                    tweet_mode = 'extended',
+                    lang = 'en').items(20):
+                if 'retweeted_status' in dir(tweet_info):
+                    tweet = tweet_info.retweeted_status.full_text
+                else:
+                    tweet = tweet_info.full_text
+                tweet_list.append(tweet)
+
+
             context = {
                 'title': 'Results',
-                'form': search_data,
+                'text': text,
+                'tweets': tweet_list,
             }
             return render(request, 'bokeh.html', context)
 
-            # try:
-            #     user = Person.objects.get(name = search_id)
-            #     #do something with user
-            #     html = ("<H1>%s</H1>", user)
-            #     return HttpResponse(html)
-            # except Person.DoesNotExist:
-            #     return HttpResponse("no such user")  
-        else:
-
-            context = {
-                'title': 'Home',
-                'status0': 'active',
-            }
-            return render(request, 'home.html', context)
-
-
-        # form = SearchForm(request.POST)
-        # if form.is_valid():
-        #     search = form.cleaned_data
-        #     return render(request,'bokeh.html',search)
-        # else:
-        #     form = SearchForm()
-
-        # #containing items to be returned to html 
-        # context = {
-        #     'title': 'Home',
-        #     'status0': 'active',
-        # }
-
-        # return render(request, 'home.html', context)
-
-
-
 class AboutView(View):
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         context = {
             'title': 'About',
             'status1': 'active',
@@ -79,10 +70,10 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
-class ResultsView(View):
+class ResultsView(TemplateView):
 
     #get method for generating the graph display
-    def get(self, request, *args, **kwargs):
+    def post(self, request):
 
         #randomly generated x coord and y coord
         x_coord = []
