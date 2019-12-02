@@ -47,12 +47,6 @@ class HomeView(View):
             tweet_list = []
             polar = []
             subj= []
-            for tweet_info in tweepy.Cursor(
-                    api.search,
-                    q = text,
-                    tweet_mode = 'extended',
-                    lang = 'en'
-                    ).items(20):
 
             for tweet_info in tweepy.Cursor(api.search, q = text, tweet_mode = 'extended', lang = 'en').items(20):
                 tweet = ''
@@ -62,12 +56,14 @@ class HomeView(View):
                     tweet = tweet_info.full_text
                 tweet_list.append(tweet)
 
-
+            # pushing data from tweets to ResultsView
             for tweet in tweet_list:
                 blob = TextBlob(tweet)
                 polar.append(blob.sentiment.polarity)
                 subj.append(blob.sentiment.subjectivity)
             request.session['polar'] = polar
+            request.session['subj'] = subj
+
             # dictionary of key: tweet to value: sentiment polarity
             sentiment_dict = {}
 
@@ -120,40 +116,26 @@ class ResultsView(View):
     def get(self, request, *args, **kwargs):
         x_coord = []
         y_coord = []
+        # pulling data from tweets from HomeView 
         polar = request.session.get('polar')
-        for i in range(100):
-            x_coord.append(random.randint(0,50))
-            y_coord.append(random.randint(0,50))
-
-        #create scatter plot for figure 1
-        # plot = figure(
-        #     title='Test Scatter',
-        #     x_axis_label='X-axis',
-        #     y_axis_label='Y-axis',
-        #     plot_width=400,
-        #     plot_height=400,
-        #     sizing_mode='scale_width'
-        #     )
-
-        # plot.scatter(x_coord,y_coord)
-
-        #define line graph coords
-        # x1 = [1,2,3,4,5]
-        # y1 = [1,2,3,4,5]
-        x1 = list(range(1,len(polar)-1))
-        y1 = polar
+        subj = request.session.get('subj')
+        xs = list(range(0,len(polar)))
+        zeros = [0] * len(polar) # list of zeros to use as neg/pos separator
+        
 
 
         #plot as line graph figure 2
         plot1 = figure(
-            title='Polarity',
+            title='Polarity(red) and Subjectivity(blue) of Tweets',
             x_axis_label='X-axis',
             y_axis_label='Y-axis',
             plot_width=400,
             plot_height=400,
             sizing_mode='scale_width'
             )
-        plot1.line(x1,y1,line_width=2)
+        plot1.line(xs,zeros,line_width=4, color="black")
+        plot1.line(xs,polar,line_width=2, color="red")
+        plot1.line(xs,subj,line_width=2,  color="blue")
 
 
         #assign both graphs to a column structure
