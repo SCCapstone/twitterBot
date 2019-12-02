@@ -53,6 +53,8 @@ class HomeView(View):
                     tweet_mode = 'extended',
                     lang = 'en'
                     ).items(20):
+
+            for tweet_info in tweepy.Cursor(api.search, q = text, tweet_mode = 'extended', lang = 'en').items(20):
                 tweet = ''
                 if 'retweeted_status' in dir(tweet_info):
                     tweet = tweet_info.retweeted_status.full_text
@@ -60,15 +62,38 @@ class HomeView(View):
                     tweet = tweet_info.full_text
                 tweet_list.append(tweet)
 
+
             for tweet in tweet_list:
                 blob = TextBlob(tweet)
                 polar.append(blob.sentiment.polarity)
                 subj.append(blob.sentiment.subjectivity)
             request.session['polar'] = polar
+            # dictionary of key: tweet to value: sentiment polarity
+            sentiment_dict = {}
+
+            for i in range(len(tweet_list)):
+                tweet_TB = TextBlob(tweet_list[i])
+                sentiment_dict[tweet_list[i]] = tweet_TB.sentiment.polarity
+
+            # For Polarity Pie Chart
+            pos = 0
+            neg = 0
+            neutral = 0
+            for n in sentiment_dict.values():
+                if (n == 0.0):
+                    neutral = neutral + 1
+                elif (n > 0):
+                    pos = pos + 1
+                else:
+                    neg = neg + 1
+
+            polar_dict = {'positive':pos, 'negative':neg, 'neutral':neutral}
+
             context = {
                 'title': 'Results',
                 'text': text,
-                'tweets': tweet_list,
+                'tweets': sentiment_dict.keys(),
+                'sentiments' : sentiment_dict.values(),
             }
             return render(request, 'bokeh.html', context)
 
