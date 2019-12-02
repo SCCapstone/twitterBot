@@ -121,21 +121,21 @@ class ResultsView(View):
         subj = request.session.get('subj')
         xs = list(range(0,len(polar)))
         zeros = [0] * len(polar) # list of zeros to use as neg/pos separator
-        
 
-
-        #plot as line graph figure 2
+        #plot as multi line graph
         plot1 = figure(
             title='Polarity(red) and Subjectivity(blue) of Tweets',
-            x_axis_label='X-axis',
-            y_axis_label='Y-axis',
+            x_axis_label='Tweets',
+            y_axis_label='Values',
             plot_width=400,
             plot_height=400,
             sizing_mode='scale_width'
             )
-        plot1.line(xs,zeros,line_width=4, color="black")
-        plot1.line(xs,polar,line_width=2, color="red")
-        plot1.line(xs,subj,line_width=2,  color="blue")
+        plot1.line(xs,zeros,line_width=4, color="black") # zeros line
+        plot1.line(xs,polar,line_width=2, color="red") # polar line
+        plot1.line(xs,subj,line_width=2,  color="blue") # subj line
+
+
 
 
         #assign both graphs to a column structure
