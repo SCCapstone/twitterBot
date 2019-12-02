@@ -6,6 +6,12 @@
   {% for tweet in tweets %}
   	<li>{{ tweet }}</li>
   {% endfor %}
+
+  <!-- tested to see sentiment by printing it out
+  {% for sentiment in sentiments %}
+  	<li>{{ sentiment }}</li>
+  {% endfor %} -->
+
   <!--  This is for the graph display  -->
   {{ div | safe }}
   {{ script | safe }}

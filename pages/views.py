@@ -45,12 +45,7 @@ class HomeView(View):
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
             api = tweepy.API(auth)
             tweet_list = []
-            for tweet_info in tweepy.Cursor(
-                    api.search,
-                    q = text,
-                    tweet_mode = 'extended',
-                    lang = 'en'
-                    ).items(20):
+            for tweet_info in tweepy.Cursor(api.search, q = text, tweet_mode = 'extended', lang = 'en').items(20):
                 tweet = ''
                 if 'retweeted_status' in dir(tweet_info):
                     tweet = tweet_info.retweeted_status.full_text
@@ -58,11 +53,18 @@ class HomeView(View):
                     tweet = tweet_info.full_text
                 tweet_list.append(tweet)
 
+            # dictionary of key: tweet to value: sentiment polarity
+            sentiment_dict = {}
+
+            for i in range(len(tweet_list)):
+                tweet_TB = TextBlob(tweet_list[i])
+                sentiment_dict[tweet_list[i]] = tweet_TB.sentiment.polarity
 
             context = {
                 'title': 'Results',
                 'text': text,
-                'tweets': tweet_list,
+                'tweets': sentiment_dict.keys(),
+                'sentiments' : sentiment_dict.values(),
             }
             return render(request, 'bokeh.html', context)
 
