@@ -1,6 +1,8 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import TemplateView, View, CreateView
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views import generic
 from .forms import CustomUserCreationForm, SearchForm
@@ -12,8 +14,16 @@ import random, tweepy
 from textblob import TextBlob
 
 # create views here
-class HomeView(TemplateView):
 
+@method_decorator(login_required, name='dispatch')
+class ProfileView(View):
+    def get(self, request):
+        context = {
+
+        }
+        return render(request,'profile.html',context)
+
+class HomeView(View):
     #get method decides weather to transition
     #to results or stay on the home page
     def get(self, request):
@@ -26,7 +36,6 @@ class HomeView(TemplateView):
         return render(request, 'home.html', context)
 
     def post(self, request):
-
         form = SearchForm(request.POST)
         if form.is_valid():
             text = form.cleaned_data['search']
@@ -47,8 +56,7 @@ class HomeView(TemplateView):
                     tweet = tweet_info.retweeted_status.full_text
                 else:
                     tweet = tweet_info.full_text
-                tweetBlob = TextBlob(tweet)
-                tweet_list.append((tweet,tweetBlob.sentiment.polarity))
+                tweet_list.append(tweet)
 
 
             context = {
@@ -70,16 +78,15 @@ class AboutView(View):
 
 class SignUp(generic.CreateView):
 
+    #define variables here
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
 
-class ResultsView(TemplateView):
 
-    #get method for generating the graph display
-    def post(self, request):
-
-        #randomly generated x coord and y coord
+class ResultsView(View):
+ 
+    def get(self, request, *args, **kwargs):
         x_coord = []
         y_coord = []
         for i in range(100):
