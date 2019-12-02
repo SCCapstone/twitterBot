@@ -66,11 +66,11 @@ class HomeView(View):
             neutral = 0
             for n in sentiment_dict.values():
                 if (n == 0.0):
-                    ++neutral
+                    neutral = neutral + 1
                 elif (n > 0):
-                    ++pos
+                    pos = pos + 1
                 else:
-                    ++neg
+                    neg = neg + 1
 
             polar_dict = {'positive':pos, 'negative':neg, 'neutral':neutral}
 
