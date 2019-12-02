@@ -24,7 +24,7 @@ class ProfileView(View):
         return render(request,'profile.html',context)
 
 class HomeView(View):
-    #get method decides weather to transition
+    #get method decides whether to transition
     #to results or stay on the home page
     def get(self, request):
         form = SearchForm()
@@ -45,6 +45,8 @@ class HomeView(View):
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
             api = tweepy.API(auth)
             tweet_list = []
+            polar = []
+            subj= []
             for tweet_info in tweepy.Cursor(
                     api.search,
                     q = text,
@@ -58,7 +60,11 @@ class HomeView(View):
                     tweet = tweet_info.full_text
                 tweet_list.append(tweet)
 
-
+            for tweet in tweet_list:
+                blob = TextBlob(tweet)
+                polar.append(blob.sentiment.polarity)
+                subj.append(blob.sentiment.subjectivity)
+            request.session['polar'] = polar
             context = {
                 'title': 'Results',
                 'text': text,
@@ -89,29 +95,33 @@ class ResultsView(View):
     def get(self, request, *args, **kwargs):
         x_coord = []
         y_coord = []
+        polar = request.session.get('polar')
         for i in range(100):
             x_coord.append(random.randint(0,50))
             y_coord.append(random.randint(0,50))
 
         #create scatter plot for figure 1
-        plot = figure(
-            title='Test Scatter',
-            x_axis_label='X-axis',
-            y_axis_label='Y-axis',
-            plot_width=400,
-            plot_height=400,
-            sizing_mode='scale_width'
-            )
+        # plot = figure(
+        #     title='Test Scatter',
+        #     x_axis_label='X-axis',
+        #     y_axis_label='Y-axis',
+        #     plot_width=400,
+        #     plot_height=400,
+        #     sizing_mode='scale_width'
+        #     )
 
-        plot.scatter(x_coord,y_coord)
+        # plot.scatter(x_coord,y_coord)
 
         #define line graph coords
-        x1 = [1,2,3,4,5]
-        y1 = [1,2,3,4,5]
+        # x1 = [1,2,3,4,5]
+        # y1 = [1,2,3,4,5]
+        x1 = list(range(1,len(polar)-1))
+        y1 = polar
+
 
         #plot as line graph figure 2
         plot1 = figure(
-            title='Test Line',
+            title='Polarity',
             x_axis_label='X-axis',
             y_axis_label='Y-axis',
             plot_width=400,
@@ -120,8 +130,9 @@ class ResultsView(View):
             )
         plot1.line(x1,y1,line_width=2)
 
-        #assign both craphs to a column structure
-        col = column([plot,plot1],sizing_mode='scale_width')
+
+        #assign both graphs to a column structure
+        col = column([plot1])
 
         script, div = components(col)
 
