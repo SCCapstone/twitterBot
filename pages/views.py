@@ -9,6 +9,7 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 from bokeh.resources import INLINE
 import random, tweepy
+from textblob import TextBlob
 
 # create views here
 class HomeView(TemplateView):
@@ -39,12 +40,15 @@ class HomeView(TemplateView):
                     api.search,
                     q = text,
                     tweet_mode = 'extended',
-                    lang = 'en').items(20):
+                    lang = 'en'
+                    ).items(20):
+                tweet = ''
                 if 'retweeted_status' in dir(tweet_info):
                     tweet = tweet_info.retweeted_status.full_text
                 else:
                     tweet = tweet_info.full_text
-                tweet_list.append(tweet)
+                tweetBlob = TextBlob(tweet)
+                tweet_list.append((tweet,tweetBlob.sentiment.polarity))
 
 
             context = {
@@ -118,7 +122,7 @@ class ResultsView(TemplateView):
         context = {
             'resources': INLINE.render(),
             'title': 'Results',
-            'script': script, 
+            'script': script,
             'div': div
         }
 
