@@ -138,7 +138,7 @@ class ResultsView(View):
 
 
 
-        #assign both graphs to a column structure
+        #assign graphs to a column structure
         col = column([plot1])
 
         script, div = components(col)
