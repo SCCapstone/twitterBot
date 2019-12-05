@@ -142,6 +142,7 @@ class ResultsView(View):
         subj = request.session.get('subj')
         xs = list(range(0,len(polar)))
         zeros = [0] * len(polar) # list of zeros to use as neg/pos separator
+        halves = [0.5] * len(polar) # list of halves
 
         #plot as multi line graph
         plot1 = figure(
@@ -151,10 +152,11 @@ class ResultsView(View):
             plot_width=400,
             plot_height=400,
             sizing_mode='scale_width',
-            tools='hover'
+            tools='hover, pan'
             )
-        plot1.line(xs,zeros,line_width=4, color="black") # zeros line
+        plot1.line(xs,zeros,line_width=4, color="red") # zeros line
         plot1.line(xs,polar,line_width=2, color="red") # polar line
+        plot1.line(xs,halves,line_width=4, color="blue") # halves line
         plot1.line(xs,subj,line_width=2,  color="blue") # subj line
         plot1.toolbar.active_drag = None
         plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
