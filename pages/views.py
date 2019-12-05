@@ -150,14 +150,14 @@ class ResultsView(View):
             y_axis_label='Values',
             plot_width=400,
             plot_height=400,
-            sizing_mode='scale_width'
+            sizing_mode='scale_width',
+            tools='hover'
             )
         plot1.line(xs,zeros,line_width=4, color="black") # zeros line
         plot1.line(xs,polar,line_width=2, color="red") # polar line
         plot1.line(xs,subj,line_width=2,  color="blue") # subj line
-
-
-
+        plot1.toolbar.active_drag = None
+        plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
 
         #assign graphs to a column structure
         col = column([plot1])
