@@ -10,8 +10,8 @@ from bokeh.layouts import column
 from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 from bokeh.resources import INLINE
-import random, tweepy
 from textblob import TextBlob
+import random, tweepy, sys
 
 # create views here
 
@@ -24,8 +24,7 @@ class ProfileView(View):
         return render(request,'profile.html',context)
 
 class HomeView(View):
-    #get method decides whether to transition
-    #to results or stay on the home page
+
     def get(self, request):
         form = SearchForm()
         context = {
@@ -38,38 +37,60 @@ class HomeView(View):
     def post(self, request):
         form = SearchForm(request.POST)
         if form.is_valid():
-            text = form.cleaned_data['search']
+            search_text = form.cleaned_data['search']
 
             #need to move this chunk of code
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
             api = tweepy.API(auth)
-            tweet_list = []
+            tweet_data_list = []
             polar = []
             subj= []
 
-            for tweet_info in tweepy.Cursor(api.search, q = text, tweet_mode = 'extended', lang = 'en').items(20):
-                tweet = ''
-                if 'retweeted_status' in dir(tweet_info):
-                    tweet = tweet_info.retweeted_status.full_text
-                else:
-                    tweet = tweet_info.full_text
-                tweet_list.append(tweet)
+            #this is all the tweet data
+            # text, id, retweets,username, follower count
+            #tweet_data =  tweepy.Cursor(api.search, q = search_text, tweet_mode = 'extended', lang = 'en').items(50)
 
-            # pushing data from tweets to ResultsView
-            for tweet in tweet_list:
-                blob = TextBlob(tweet)
+            # putting tweet_data into a nice dict
+            for tweet_data in tweepy.Cursor(api.search, q = search_text, tweet_mode = 'extended', lang = 'en').items(50):
+
+                #little hack here to get the fill 140 characters of tweet
+                tweet = ''
+                if 'retweeted_status' in dir(tweet_data):
+                    tweet = tweet_data.retweeted_status.full_text
+                else:
+                    tweet = tweet_data.full_text
+
+                tweet_dict = {
+                'Tweet ID': tweet_data.id,
+                'Screen Name': tweet_data.user.screen_name,
+                'User Name': tweet_data.user.name,
+                'Tweet Created At': tweet_data.created_at,
+                'Tweet Text': tweet,
+                'User Location': tweet_data.user.location,
+                'Tweet Coordinates': tweet_data.coordinates,
+                'Retweet Count': tweet_data.retweet_count,
+                'Retweeted': tweet_data.retweeted,
+                'Phone Type': tweet_data.source,
+                'Favorite Count': tweet_data.favorite_count,
+                'Favorited': tweet_data.favorited,
+                'Replied': tweet_data.in_reply_to_status_id_str
+                }
+                tweet_data_list.append(tweet_dict)
+
+            for tweet_data in tweet_data_list:
+                blob = TextBlob(tweet_data['Tweet Text'])
                 polar.append(blob.sentiment.polarity)
                 subj.append(blob.sentiment.subjectivity)
-            request.session['polar'] = polar
-            request.session['subj'] = subj
+                request.session['polar'] = polar
+                request.session['subj'] = subj
 
             # dictionary of key: tweet to value: sentiment polarity
             sentiment_dict = {}
 
-            for i in range(len(tweet_list)):
-                tweet_TB = TextBlob(tweet_list[i])
-                sentiment_dict[tweet_list[i]] = tweet_TB.sentiment.polarity
+            for tweet_data in tweet_data_list:
+                tweet_TB = TextBlob(tweet_data['Tweet Text'])
+                sentiment_dict[tweet_data['Tweet Text']] = tweet_TB.sentiment.polarity
 
             # For Polarity Pie Chart
             pos = 0
@@ -87,8 +108,8 @@ class HomeView(View):
 
             context = {
                 'title': 'Results',
-                'text': text,
-                'tweets': sentiment_dict.keys(),
+                'text': search_text,
+                'tweet_data_list': tweet_data_list,
                 'sentiments' : sentiment_dict.values(),
             }
             return render(request, 'bokeh.html', context)
@@ -140,10 +161,11 @@ class ResultsView(View):
 
         #assign graphs to a column structure
         col = column([plot1])
+        col.sizing_mode = 'scale_width'
 
         script, div = components(col)
 
-        #containing items to be returned to html 
+        #containing items to be returned to html page
         context = {
             'resources': INLINE.render(),
             'title': 'Results',

@@ -5,8 +5,11 @@
   <p1>You Searched: {{ text }}</p1>
   <p1><a href="bokeh"><br>Graphs</a></p1>
 
-  {% for tweet in tweets %}
-  	<li>{{ tweet }}</li>
+  {% for tweet_data in tweet_data_list %}
+  	{% for key, value in tweet_data.items %}
+  		<li>{{ key }}: {{ value }}</li>
+  	{% endfor %}
+  	<li></li>
   {% endfor %}
 
   <!-- tested to see sentiment by printing it out
