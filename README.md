@@ -16,6 +16,8 @@ We are building a twitter data-scraping software that will fetch tweets based on
   5. Tweepy 3.8.0
   6. TextBlob 0.15.3
   7. NLTK 3.4.5
+  8. nodejs 8.10.0
+  9. npm 3.5.2
  
 ### Running (locally):
   python manage.py runserver 
@@ -25,14 +27,21 @@ We are building a twitter data-scraping software that will fetch tweets based on
   heroku
 
 ### Testing:
-  N/A
+  For Unit testing: python manage.py test
+  
+  For Behavioral testing:
+  
+  Google Chrome: npm install -g chromedriver
+  
+  Firefox: npm install -g geckodriver
+  
+  selenium-side-runner /path/to/your-project.side
 
 ### Authors:
   1. Joey O'Neill jtoneill@email.sc.edu
   2. Dustin Squires squireso@email.sc.edu
   3. David De Maria ddemaria@email.sc.edu
-  4.
-  5.
+  4. Jackson Price
   
 ### Style:
   We are following the Django style guide which follows the PEP 8 style guide for python as well.  
