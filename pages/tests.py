@@ -1,6 +1,7 @@
-#Pages 
 from django.test import SimpleTestCase
 from django.test import TestCase
+
+from pages.forms import SearchForm
 # Create your tests here.
 
 class PagesTests(SimpleTestCase):
