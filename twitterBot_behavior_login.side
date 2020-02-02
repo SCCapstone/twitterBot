@@ -1,0 +1,166 @@
+{
+  "id": "00f94b29-fc87-4718-a6cf-179bd06225a6",
+  "version": "2.0",
+  "name": "twitterBot_behavior_login",
+  "url": "https://tweeter-bot-py.herokuapp.com",
+  "tests": [{
+    "id": "813bfbb5-c866-42ea-850f-03fb3c503519",
+    "name": "test1_loginFunctions",
+    "commands": [{
+      "id": "e2eb64e7-baf7-4da7-b169-18500ce3560e",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fabe69a7-4970-4e49-8a99-293100128970",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "741x741",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ebba2dc3-2735-42e8-bc69-316eea188014",
+      "comment": "",
+      "command": "click",
+      "target": "css=.dropdown-toggle",
+      "targets": [
+        ["css=.dropdown-toggle", "css:finder"],
+        ["xpath=(//a[contains(@href, '#')])[2]", "xpath:href"],
+        ["xpath=//li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,' ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "3bc522dd-a479-4f62-aa49-e21431b514a6",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Sign In",
+      "targets": [
+        ["linkText=Sign In", "linkText"],
+        ["css=.dropdown-item:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Sign In')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/accounts/login/')]", "xpath:href"],
+        ["xpath=//div/a", "xpath:position"],
+        ["xpath=//a[contains(.,' Sign In')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d8a377a6-e620-4803-b6c5-88c253d31930",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_username",
+      "targets": [
+        ["id=id_username", "id"],
+        ["name=username", "name"],
+        ["css=#id_username", "css:finder"],
+        ["xpath=//input[@id='id_username']", "xpath:attributes"],
+        ["xpath=//p/input", "xpath:position"]
+      ],
+      "value": "TestingUser"
+    }, {
+      "id": "fcc03d7d-5a2e-4a6b-8e5f-c8cb93324f27",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_password",
+      "targets": [
+        ["id=id_password", "id"],
+        ["name=password", "name"],
+        ["css=#id_password", "css:finder"],
+        ["xpath=//input[@id='id_password']", "xpath:attributes"],
+        ["xpath=//p[2]/input", "xpath:position"]
+      ],
+      "value": "TestTestTest"
+    }, {
+      "id": "da327a1d-5f82-47d5-bc0e-90c4918b25d4",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=id_password",
+      "targets": [
+        ["id=id_password", "id"],
+        ["name=password", "name"],
+        ["css=#id_password", "css:finder"],
+        ["xpath=//input[@id='id_password']", "xpath:attributes"],
+        ["xpath=//p[2]/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "2b92e3c0-aa27-4a93-9b17-e2b55f5144a8",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=About",
+      "targets": [
+        ["linkText=About", "linkText"],
+        ["css=.nav-item:nth-child(4) > .nav-link", "css:finder"],
+        ["xpath=//a[contains(text(),'About')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/about/')]", "xpath:href"],
+        ["xpath=//li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'About')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "25c88cbd-302d-4705-8f93-b1d845531936",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=TestingUser",
+      "targets": [
+        ["linkText=TestingUser", "linkText"],
+        ["css=.nav-item:nth-child(6) > .nav-link", "css:finder"],
+        ["xpath=(//a[contains(@href, '#')])[4]", "xpath:href"],
+        ["xpath=//li[6]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1421db47-d54f-4ab0-a527-d8737f421d91",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=View Profile",
+      "targets": [
+        ["linkText=View Profile", "linkText"],
+        ["css=.show > .dropdown-item:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'View Profile')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/profile/')]", "xpath:href"],
+        ["xpath=//li[6]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View Profile')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1d0df716-83e6-4f04-9f56-76f8c10d2a83",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=TestingUser",
+      "targets": [
+        ["linkText=TestingUser", "linkText"],
+        ["css=.nav-item:nth-child(6) > .nav-link", "css:finder"],
+        ["xpath=(//a[contains(@href, '#')])[4]", "xpath:href"],
+        ["xpath=//li[6]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "07bb952d-0d9a-4efe-aabf-34ed93a673c6",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Sign Out",
+      "targets": [
+        ["linkText=Sign Out", "linkText"],
+        ["css=.dropdown-item:nth-child(3)", "css:finder"],
+        ["xpath=//a[contains(text(),'Sign Out')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/accounts/logout/')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,' Sign Out')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "613b43df-99c9-45a9-b76b-9c507d72d79b",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["813bfbb5-c866-42ea-850f-03fb3c503519"]
+  }],
+  "urls": ["https://tweeter-bot-py.herokuapp.com/"],
+  "plugins": []
+}
