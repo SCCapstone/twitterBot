@@ -5,31 +5,65 @@
   <p1>You Searched: {{ text }}</p1>
   <p1><a href="bokeh"><br>Graphs</a></p1>
 
-  {% for tweet_data in tweet_data_list %}
-  	{% for key, value in tweet_data.items %}
-  		<li>{{ key }}: {{ value }}</li>
-  	{% endfor %}
-  	<li></li>
-  {% endfor %}
-
-  <!-- tested to see sentiment by printing it out
-  {% for sentiment in sentiments %}
-  	<li>{{ sentiment }}</li>
-  {% endfor %} -->
-
   <div class="row">
 
-  	<!-- Left column -->
+    <!-- Left column -->
     <div class="col-sm-6">
-    	<!-- Dustin put your graph here my brotha -->
+      <!-- Dustin put your graph here my brotha -->
     </div>
 
     <!-- Right column -->
     <div class="col-sm-6">
 
+      {% for tweet_data in tweet_data_list %}
+      <div class="panel panel-info">
+        
+        <div class="panel-heading">
+          {% for key, value in tweet_data.items %}
+            {% if key == 'User Name' %}
+              <b>{{ value }} </b>
+            {% endif %}
+          {% endfor %}
+          {% for key, value in tweet_data.items %}
+            {% if key == 'Screen Name' %}
+              <i>@{{ value }}</i>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="panel-body">
+          {% for key, value in tweet_data.items %}
+            {% if key == 'Tweet Text' %}
+              {{ value }}
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="panel-footer">
+          {% for key, value in tweet_data.items %}
+            {% if key == 'Retweet Count' %}
+              <b>{{ value }} </b>Retweets
+            {% endif %}
+          {% endfor %}
+
+          {% for key, value in tweet_data.items %}
+            {% if key == 'Favorite Count' %}
+              <b>{{ value }} </b>Likes
+            {% endif %}
+          {% endfor %}
+
+          {% for key, value in tweet_data.items %}
+            {% if key == 'Tweet Created At' %}
+              <i>{{ value }} </i>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+      </div>
+      {% endfor %}
     </div>
 
-</div>
+  </div>
 
   <!--  This is for the graph display  -->
   {{ div | safe }}
