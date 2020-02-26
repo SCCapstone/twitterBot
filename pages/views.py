@@ -25,17 +25,9 @@ class ProfileView(View):
 
 class HomeView(View):
 
-    def get(self, request):
-        form = SearchForm()
-        context = {
-            'title': 'Home',
-            'status0': 'active',
-            'form': form,
-        }
-        return render(request, 'home.html', context)
 
-    def post(self, request):
-        form = SearchForm(request.POST)
+    def get(self, request):
+        form = SearchForm(request.GET)
         if form.is_valid():
             search_text = form.cleaned_data['search']
 
@@ -56,10 +48,13 @@ class HomeView(View):
 
                 #little hack here to get the fill 140 characters of tweet
                 tweet = ''
+                favorite_count = 0
                 if 'retweeted_status' in dir(tweet_data):
                     tweet = tweet_data.retweeted_status.full_text
+                    favorite_count = tweet_data.retweeted_status.favorite_count
                 else:
                     tweet = tweet_data.full_text
+                    favorite_count = tweet_data.favorite_count
 
                 tweet_dict = {
                 'Tweet ID': tweet_data.id,
@@ -72,7 +67,7 @@ class HomeView(View):
                 'Retweet Count': tweet_data.retweet_count,
                 'Retweeted': tweet_data.retweeted,
                 'Phone Type': tweet_data.source,
-                'Favorite Count': tweet_data.favorite_count,
+                'Favorite Count': favorite_count,
                 'Favorited': tweet_data.favorited,
                 'Replied': tweet_data.in_reply_to_status_id_str
                 }
@@ -106,13 +101,57 @@ class HomeView(View):
 
             polar_dict = {'positive':pos, 'negative':neg, 'neutral':neutral}
 
+            x_coord = []
+            y_coord = []
+            # pulling data from tweets from HomeView 
+
+            xs = list(range(0,len(polar)))
+            zeros = [0] * len(polar) # list of zeros to use as neg/pos separator
+            halves = [0.5] * len(polar) # list of halves
+
+            #plot as multi line graph
+            plot1 = figure(
+                title='Polarity(red) and Subjectivity(blue) of Tweets',
+                x_axis_label='Tweets',
+                y_axis_label='Values',
+                plot_width=400,
+                plot_height=400,
+                sizing_mode='scale_width',
+                tools='hover, pan'
+                )
+            plot1.line(xs,zeros,line_width=4, color="red") # zeros line
+            plot1.line(xs,polar,line_width=2, color="red") # polar line
+            plot1.line(xs,halves,line_width=4, color="blue") # halves line
+            plot1.line(xs,subj,line_width=2,  color="blue") # subj line
+            plot1.toolbar.active_drag = None
+            plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
+
+            #assign graphs to a column structure
+            col = column([plot1])
+            col.sizing_mode = 'scale_width'
+
+            script, div = components(col)
+
+            #containing items to be returned to html page
             context = {
-                'title': 'Results',
+                'title': 'Home',
+                'status0': 'active',
                 'text': search_text,
                 'tweet_data_list': tweet_data_list,
                 'sentiments' : sentiment_dict.values(),
+                'resources': INLINE.render(),
+                'script': script,
+                'div': div,
             }
-            return render(request, 'bokeh.html', context)
+
+            return render(request, 'home.html', context)
+
+        else:
+            context = {
+                'title': 'Home',
+            }
+            return render(request, 'home.html', context)
+            
 
 class AboutView(View):
 
@@ -130,50 +169,3 @@ class SignUp(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'signup.html'
-
-
-class ResultsView(View):
- 
-    def get(self, request, *args, **kwargs):
-        x_coord = []
-        y_coord = []
-        # pulling data from tweets from HomeView 
-        polar = request.session.get('polar')
-        subj = request.session.get('subj')
-        xs = list(range(0,len(polar)))
-        zeros = [0] * len(polar) # list of zeros to use as neg/pos separator
-        halves = [0.5] * len(polar) # list of halves
-
-        #plot as multi line graph
-        plot1 = figure(
-            title='Polarity(red) and Subjectivity(blue) of Tweets',
-            x_axis_label='Tweets',
-            y_axis_label='Values',
-            plot_width=400,
-            plot_height=400,
-            sizing_mode='scale_width',
-            tools='hover, pan'
-            )
-        plot1.line(xs,zeros,line_width=4, color="red") # zeros line
-        plot1.line(xs,polar,line_width=2, color="red") # polar line
-        plot1.line(xs,halves,line_width=4, color="blue") # halves line
-        plot1.line(xs,subj,line_width=2,  color="blue") # subj line
-        plot1.toolbar.active_drag = None
-        plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
-
-        #assign graphs to a column structure
-        col = column([plot1])
-        col.sizing_mode = 'scale_width'
-
-        script, div = components(col)
-
-        #containing items to be returned to html page
-        context = {
-            'resources': INLINE.render(),
-            'title': 'Results',
-            'script': script,
-            'div': div
-        }
-
-        #return request with correct html along wiht context
-        return render(request,'bokeh.html',context)

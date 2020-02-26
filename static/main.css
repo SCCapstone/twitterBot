@@ -11,3 +11,22 @@ h1, h2 a {
 	color: black;
 	border: black;
 }
+
+#content {
+  height: 100%;
+}
+#left {
+  float: left;
+  width: 30%;
+  height: 500px;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 0.5em;
+}
+#right {
+  float: left;
+  width: 70%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0.5em;
+}

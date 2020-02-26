@@ -5,24 +5,87 @@
   <div class="row">
 
   	<!-- Left column -->
-    <div class="col-sm-3"></div>
+    <div class="col-sm-1">
+
+    </div>
 
     <!-- middle main column -->
-    <div class="col-sm-6" style="">
+    <div class="col-sm-10" style="">
 
       <!-- header temporary holder for logo-->
       <h1 style="text-align: center; padding-top: 150px; color: #00acee; font-family: 'Courier New', Times, monospace;"> tweetBot. </h1>
 
-      <form method="post" style="margin: 0; text-align: center;">
+      <form method="GET" style="margin: 0; text-align: center;">
         {% csrf_token %}
         
         <input  id="search" type="text" name="search" placeholder="Search" class="form-control mr-sm-0">
         <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">Search</button>
       </form>
+
+      <div id="content">
+        <div id="left">
+          <p1>You Searched: {{ text }}</p1>
+
+          {% for tweet_data in tweet_data_list %}
+          <div class="panel panel-info">
+            
+            <div class="panel-heading">
+              {% for key, value in tweet_data.items %}
+                {% if key == 'User Name' %}
+                  <b>{{ value }} </b>
+                {% endif %}
+              {% endfor %}
+              {% for key, value in tweet_data.items %}
+                {% if key == 'Screen Name' %}
+                  <i>@{{ value }}</i>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <div class="panel-body">
+              {% for key, value in tweet_data.items %}
+                {% if key == 'Tweet Text' %}
+                  {{ value }}
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <div class="panel-footer">
+              {% for key, value in tweet_data.items %}
+                {% if key == 'Retweet Count' %}
+                  <b>{{ value }} </b>Retweets
+                {% endif %}
+              {% endfor %}
+
+              {% for key, value in tweet_data.items %}
+                {% if key == 'Favorite Count' %}
+                  <b>{{ value }} </b>Likes
+                {% endif %}
+              {% endfor %}
+
+              {% for key, value in tweet_data.items %}
+                {% if key == 'Tweet Created At' %}
+                  <i>{{ value }} </i>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+          </div>
+          {% endfor %}
+        </div>
+        <div id="right">
+          <!-- THIS IS THE GRAPH DISPLAY -->
+          {{ div | safe }}
+          {{ script | safe }}
+        </div>
+      </div>
+
     </div>
 
-    <!-- Right column-->
-    <div class="col-sm-3"></div>
+    <!-- Right column -->
+    <div class="col-sm-1">
+
+    </div>
   </div>
 
 {% endblock content %}
