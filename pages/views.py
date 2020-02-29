@@ -112,7 +112,7 @@ class HomeView(View):
 
             #plot as multi line graph
             plot1 = figure(
-                title='Polarity(red) and Subjectivity(blue) of Tweets',
+                title='Polarity of Tweets',
                 x_axis_label='Tweets',
                 y_axis_label='Values',
                 plot_width=400,
@@ -120,18 +120,34 @@ class HomeView(View):
                 sizing_mode='scale_width',
                 tools='hover, pan'
                 )
-            plot1.line(xs,zeros,line_width=4, color="red") # zeros line
-            plot1.line(xs,polar,line_width=2, color="red") # polar line
-            plot1.line(xs,halves,line_width=4, color="blue") # halves line
-            plot1.line(xs,subj,line_width=2,  color="blue") # subj line
+            plot2 = figure(
+                title='Subjectivity of Tweets',
+                x_axis_label='Tweets',
+                y_axis_label='Values',
+                plot_width=400,
+                plot_height=400,
+                sizing_mode='scale_width',
+                tools='hover, pan'
+                )
+            # plot1.line(xs,zeros,line_width=4, color="red") # zeros line
+            plot1.vbar(x=xs,top=sorted(polar),width=0.5, color="red") # polar line
+            plot2.vbar(x=xs,top=sorted(subj),width=0.5, color="blue") # subj line
+
+            # plot1.line(xs,halves,line_width=4, color="blue") # halves line
+            # plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             plot1.toolbar.active_drag = None
             plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
+            plot2.toolbar.active_drag = None
+            plot2.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
 
             #assign graphs to a column structure
             col = column([plot1])
             col.sizing_mode = 'scale_width'
+            col2 = column([plot2])
+            col2.sizing_mode = 'scale_width'
 
-            script, div = components(col)
+            script1, div1 = components(col)
+            script2, div2 = components(col2)
 
             #containing items to be returned to html page
             context = {
@@ -141,8 +157,10 @@ class HomeView(View):
                 'tweet_data_list': tweet_data_list,
                 'sentiments' : sentiment_dict.values(),
                 'resources': INLINE.render(),
-                'script': script,
-                'div': div,
+                'script1': script1,
+                'div1': div1,
+                'script2': script2,
+                'div2': div2,
             }
 
             return render(request, 'home.html', context)
