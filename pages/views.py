@@ -28,8 +28,10 @@ class HomeView(View):
 
     def get(self, request):
         form = SearchForm(request.GET)
+        search_bool = False
         if form.is_valid():
             search_text = form.cleaned_data['search']
+            search_bool = True
 
 
             #need to move this chunk of code
@@ -154,6 +156,7 @@ class HomeView(View):
                 'title': 'Home',
                 'status0': 'active',
                 'text': search_text,
+                'searchBool' : search_bool,
                 'tweet_data_list': tweet_data_list,
                 'sentiments' : sentiment_dict.values(),
                 'resources': INLINE.render(),
