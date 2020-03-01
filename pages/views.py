@@ -11,7 +11,9 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 from bokeh.resources import INLINE
 from textblob import TextBlob
+from datetime import datetime #####
 import random, tweepy, sys
+
 
 # create views here
 
@@ -27,27 +29,49 @@ class HomeView(View):
 
 
     def get(self, request):
+
+        #for is the search form in forms.py
         form = SearchForm(request.GET)
         if form.is_valid():
+
+            #User Input
             search_text = form.cleaned_data['search']
 
 
-            #need to move this chunk of code
+            #Advanced Search Input Here
+            #declare variables because not all fields of the form are required
+            #lower_date_string = ''
+            #upper_date_string = ''
+            retweet_threshold_number = 0
+            favorite_threshold_number = 0
+            #check if the content of the field is present
+            if form.cleaned_data['retweet_threshold']:
+                retweet_threshold_number = form.cleaned_data['retweet_threshold']
+            if form.cleaned_data['favorite_threshold']:
+                favorite_threshold_number = form.cleaned_data['favorite_threshold']
+            #if form.cleaned_data['upper_date_limit']:
+            #    upper_date_string = form.cleaned_data['upper_date_limit']
+            #    upper_datetime = datetime.strptime(upper_date_string, '%m/%d/%Y %I:%M %p').date()
+            #if form.cleaned_data['lower_date_limit']:
+            #    lower_date_string = form.cleaned_data['lower_date_limit']
+            #    lower_datetime = datetime.strptime(lower_date_string, '%m/%d/%Y %I:%M %p').date()
+
+            #Tweepy Authentication
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
             api = tweepy.API(auth)
+
+            #list used to store tweet data
             tweet_data_list = []
+
+            #lists used to store graph coordinates for graph
             polar = []
             subj= []
 
-            #this is all the tweet data
-            # text, id, retweets,username, follower count
-            #tweet_data =  tweepy.Cursor(api.search, q = search_text, tweet_mode = 'extended', lang = 'en').items(50)
-
-            # putting tweet_data into a nice dict
-            for tweet_data in tweepy.Cursor(api.search, q = search_text, tweet_mode = 'extended', lang = 'en').items(50):
-
-                #little hack here to get the fill 140 characters of tweet
+            # putting tweet_data into a dict
+            for tweet_data in tweepy.Cursor(api.search, q = search_text, tweet_mode = 'extended', lang = 'en').items(100):
+                #if retweeted status exists in tweet_data a little workaround is needed
+                #to get the correct data from the tweet_data
                 tweet = ''
                 favorite_count = 0
                 if 'retweeted_status' in dir(tweet_data):
@@ -57,6 +81,28 @@ class HomeView(View):
                     tweet = tweet_data.full_text
                     favorite_count = tweet_data.favorite_count
 
+                #advanced search handlers
+                #handles user input of retweet_threshold
+                if tweet_data.retweet_count < retweet_threshold_number:
+                    continue
+                #handles user input of favorite threshold
+                if favorite_count < favorite_threshold_number:
+                    continue
+                #handles user upper and lower limit on dates
+                tweet_created = tweet_data.created_at#.date()
+                #upper_datetime = datetime.strptime(upper_date_string, '%m/%d/%Y %I:%M %p')
+                #upper_date = upper_datetime.date()
+                #lower_datetime = datetime.strptime(lower_date_string, '%m/%d/%Y %I:%M %p')
+                #lower_date = lower_datetime.date()
+                #if (upper_datetime < tweet_created):
+                #    print(upper_datetime)
+                #    print('<')
+                #    print(tweet_created)
+                #    continue
+                #if (lower_datetime > tweet_created):
+                #    continue
+
+                #dict for holding all the data related to the tweet
                 tweet_dict = {
                 'Tweet ID': tweet_data.id,
                 'Screen Name': tweet_data.user.screen_name,
@@ -74,6 +120,8 @@ class HomeView(View):
                 }
                 tweet_data_list.append(tweet_dict)
 
+            #use TextBlob to analyze sentiment polarity and subjectivity
+            #append the results to the coordinates list
             for tweet_data in tweet_data_list:
                 blob = TextBlob(tweet_data['Tweet Text'])
                 polar.append(blob.sentiment.polarity)
@@ -81,7 +129,7 @@ class HomeView(View):
                 request.session['polar'] = polar
                 request.session['subj'] = subj
 
-            # dictionary of key: tweet to value: sentiment polarity
+            #dictionary of key: tweet to value: sentiment polarity
             sentiment_dict = {}
 
             for tweet_data in tweet_data_list:
@@ -100,15 +148,14 @@ class HomeView(View):
                 else:
                     neg = neg + 1
 
-            polar_dict = {'positive':pos, 'negative':neg, 'neutral':neutral}
-
             x_coord = []
             y_coord = []
-            # pulling data from tweets from HomeView 
 
             xs = list(range(0,len(polar)))
-            zeros = [0] * len(polar) # list of zeros to use as neg/pos separator
-            halves = [0.5] * len(polar) # list of halves
+            #list of zeros to use as neg/pos separator
+            zeros = [0] * len(polar)
+            #list of halves
+            halves = [0.5] * len(polar)
 
             #plot as multi line graph
             plot1 = figure(
@@ -120,6 +167,7 @@ class HomeView(View):
                 sizing_mode='scale_width',
                 tools='hover, pan'
                 )
+
             plot1.line(xs,zeros,line_width=4, color="red") # zeros line
             plot1.line(xs,polar,line_width=2, color="red") # polar line
             plot1.line(xs,halves,line_width=4, color="blue") # halves line
@@ -147,7 +195,9 @@ class HomeView(View):
 
             return render(request, 'home.html', context)
 
+        #if the form is not valid (aka: empty)
         else:
+            print("not valid")
             context = {
                 'title': 'Home',
             }

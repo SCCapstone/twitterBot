@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
+<script>
+  $(function () {
+    $('#datetimepickerUpper').datetimepicker();
+ });
+  $(function () {
+    $('#datetimepickerLower').datetimepicker();
+ });
+</script>
 
   <!-- columns divide page in 3 parts -->
   <div class="row">
@@ -18,10 +26,23 @@
       <form method="GET" style="margin: 0; text-align: center;">
         {% csrf_token %}
         
-        <input  id="search" type="text" name="search" placeholder="Search" class="form-control mr-sm-0">
+        <input  id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
+        <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold" class="form-control mr-sm-0">
+        <input id="favorite_threshold" type="text" name="favorite_threshold" placeholder="Favorite Threshold" class="form-control mr-sm-0">
+        <div class='input-group date' id='datetimepickerLower'>
+          <input id="lower_date_limit" type="text" name="lower_date_limit" placeholder="Lower Date Limit" class="form-control mr-sm-0">
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+        <div class='input-group date' id='datetimepickerUpper'>
+          <input id="lower_date_upper" type="text" name="lower_date_upper" placeholder="Upper Date Limit" class="form-control mr-sm-0">
+          <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
         <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">Search</button>
-      </form>
-
+      </form>      
       <div id="content">
         <div id="left">
           <p1>You Searched: {{ text }}</p1>
