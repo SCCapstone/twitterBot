@@ -28,11 +28,6 @@
   <div class="row">
 
     <div class="col-sm-1">
-<!--       print history -->
-      <i> History: </i>
-      {% for search in history %}
-      <b> {{ search }} </b>
-      {% endfor %}
     </div>
 
   	<!-- Left column -->
@@ -125,6 +120,23 @@
           <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
           <span class="sr-only">Next</span>
         </a>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-1">
+          <i>History:</i>
+        </div>
+
+        <div class="col-sm-8">
+          <!--print history -->
+          
+          {% for search in history %}
+            <br><b>{{ search }}</b>
+          {% endfor %}
+        </div>
+
+        <div class="col-sm-3">
+        </div>
       </div>
       {% endif %}
     </div>
