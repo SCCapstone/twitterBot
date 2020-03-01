@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views import generic
+from django.http import HttpResponse
 from .forms import CustomUserCreationForm, SearchForm
 from bokeh.layouts import column
 from bokeh.plotting import figure, output_file, show
@@ -25,15 +26,20 @@ class ProfileView(View):
 
 class HomeView(View):
 
-
     def get(self, request):
+        response = HttpResponse("Cookie set")
+        response.set_cookie('java-tutorial', 'javatpoint.com')
+        # return response
         form = SearchForm(request.GET)
         search_bool = False
+        history = ""
+
         if form.is_valid():
             search_text = form.cleaned_data['search']
             search_bool = True
 
-
+            history_cookie = str(request.COOKIES.get("searches")) + search_text + " "
+            history = history_cookie[4:(len(history_cookie))-1].split(" ")
             #need to move this chunk of code
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
@@ -164,15 +170,22 @@ class HomeView(View):
                 'div1': div1,
                 'script2': script2,
                 'div2': div2,
+                'history': history,
             }
-
-            return render(request, 'home.html', context)
+            response = render(request, 'home.html', context)
+            response.set_cookie('searches', history_cookie)
+            print(history)
+            return response
 
         else:
             context = {
                 'title': 'Home',
             }
-            return render(request, 'home.html', context)
+            response = render(request, 'home.html', context)
+            response.set_cookie('test', 'success')
+            # print(request.COOKIES.get('test'))
+            # print("testing")
+            return response
             
 
 class AboutView(View):
