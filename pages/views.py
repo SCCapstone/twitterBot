@@ -37,9 +37,11 @@ class HomeView(View):
         if form.is_valid():
             search_text = form.cleaned_data['search']
             search_bool = True
-
+            # pulling current history and adding latest search 
             history_cookie = str(request.COOKIES.get("searches")) + search_text + " "
+            # setting string from cookie to an array called history 
             history = history_cookie[4:(len(history_cookie))-1].split(" ")
+            
             #need to move this chunk of code
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
@@ -172,9 +174,10 @@ class HomeView(View):
                 'div2': div2,
                 'history': history,
             }
+            # returning response and setting cookie
             response = render(request, 'home.html', context)
             response.set_cookie('searches', history_cookie)
-            print(history)
+            # print(history)
             return response
 
         else:
@@ -182,7 +185,7 @@ class HomeView(View):
                 'title': 'Home',
             }
             response = render(request, 'home.html', context)
-            response.set_cookie('test', 'success')
+            # response.set_cookie('test', 'success')
             # print(request.COOKIES.get('test'))
             # print("testing")
             return response
