@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views import generic
+from django.http import HttpResponse
 from .forms import CustomUserCreationForm, SearchForm
 from bokeh.layouts import column
 from bokeh.plotting import figure, output_file, show
@@ -27,16 +28,23 @@ class ProfileView(View):
 
 class HomeView(View):
 
-
     def get(self, request):
 
         #for is the search form in forms.py
+        response = HttpResponse("Cookie set")
+        response.set_cookie('java-tutorial', 'javatpoint.com')
+        # return response
         form = SearchForm(request.GET)
+        search_bool = False
+        history = ""
+
         if form.is_valid():
+
+            #search is valid
+            search_bool = True
 
             #User Input
             search_text = form.cleaned_data['search']
-
 
             #Advanced Search Input Here
             #declare variables because not all fields of the form are required
@@ -56,6 +64,11 @@ class HomeView(View):
             #    lower_date_string = form.cleaned_data['lower_date_limit']
             #    lower_datetime = datetime.strptime(lower_date_string, '%m/%d/%Y %I:%M %p').date()
 
+            # pulling current history and adding latest search 
+            history_cookie = str(request.COOKIES.get("searches")) + search_text + " "
+            # setting string from cookie to an array called history 
+            history = history_cookie[4:(len(history_cookie))-1].split(" ")
+            
             #Tweepy Authentication
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
@@ -159,7 +172,16 @@ class HomeView(View):
 
             #plot as multi line graph
             plot1 = figure(
-                title='Polarity(red) and Subjectivity(blue) of Tweets',
+                title='Polarity of Tweets',
+                x_axis_label='Tweets',
+                y_axis_label='Values',
+                plot_width=400,
+                plot_height=400,
+                sizing_mode='scale_width',
+                tools='hover, pan'
+                )
+            plot2 = figure(
+                title='Subjectivity of Tweets',
                 x_axis_label='Tweets',
                 y_axis_label='Values',
                 plot_width=400,
@@ -172,36 +194,57 @@ class HomeView(View):
             plot1.line(xs,polar,line_width=2, color="red") # polar line
             plot1.line(xs,halves,line_width=4, color="blue") # halves line
             plot1.line(xs,subj,line_width=2,  color="blue") # subj line
+            # plot1.line(xs,zeros,line_width=4, color="red") # zeros line
+            plot1.vbar(x=xs,top=sorted(polar),width=0.5, color="red") # polar line
+            plot2.vbar(x=xs,top=sorted(subj),width=0.5, color="blue") # subj line
+
+            # plot1.line(xs,halves,line_width=4, color="blue") # halves line
+            # plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             plot1.toolbar.active_drag = None
             plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
+            plot2.toolbar.active_drag = None
+            plot2.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
 
             #assign graphs to a column structure
             col = column([plot1])
             col.sizing_mode = 'scale_width'
+            col2 = column([plot2])
+            col2.sizing_mode = 'scale_width'
 
-            script, div = components(col)
+            script1, div1 = components(col)
+            script2, div2 = components(col2)
 
             #containing items to be returned to html page
             context = {
                 'title': 'Home',
                 'status0': 'active',
                 'text': search_text,
+                'searchBool' : search_bool,
                 'tweet_data_list': tweet_data_list,
                 'sentiments' : sentiment_dict.values(),
                 'resources': INLINE.render(),
-                'script': script,
-                'div': div,
+                'script1': script1,
+                'div1': div1,
+                'script2': script2,
+                'div2': div2,
+                'history': history,
             }
+            # returning response and setting cookie
+            response = render(request, 'home.html', context)
+            response.set_cookie('searches', history_cookie)
+            # print(history)
+            return response
 
-            return render(request, 'home.html', context)
-
-        #if the form is not valid (aka: empty)
+        #if the form is not valid (aka: empty search)
         else:
-            print("not valid")
             context = {
                 'title': 'Home',
             }
-            return render(request, 'home.html', context)
+            response = render(request, 'home.html', context)
+            # response.set_cookie('test', 'success')
+            # print(request.COOKIES.get('test'))
+            # print("testing")
+            return response
             
 
 class AboutView(View):

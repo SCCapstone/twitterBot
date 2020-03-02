@@ -9,17 +9,11 @@
  });
 </script>
 
-  <!-- columns divide page in 3 parts -->
   <div class="row">
-
-  	<!-- Left column -->
-    <div class="col-sm-1">
-
+    <div class="col-sm-2">
     </div>
 
-    <!-- middle main column -->
-    <div class="col-sm-10" style="">
-
+    <div class="col-sm-8">
       <!-- header temporary holder for logo-->
       <h1 style="text-align: center; padding-top: 150px; color: #00acee; font-family: 'Courier New', Times, monospace;"> tweetBot. </h1>
 
@@ -30,83 +24,147 @@
         <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold" class="form-control mr-sm-0">
         <input id="favorite_threshold" type="text" name="favorite_threshold" placeholder="Favorite Threshold" class="form-control mr-sm-0">
         <div class='input-group date' id='datetimepickerLower'>
-          <input id="lower_date_limit" type="text" name="lower_date_limit" placeholder="Lower Date Limit" class="form-control mr-sm-0">
+          <input id="lower_date_limit" type="text" name="lower_date_limit" placeholder="Lower Date Limit (not fully implemented)" class="form-control mr-sm-0">
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
         </div>
         <div class='input-group date' id='datetimepickerUpper'>
-          <input id="lower_date_upper" type="text" name="lower_date_upper" placeholder="Upper Date Limit" class="form-control mr-sm-0">
+          <input id="lower_date_upper" type="text" name="lower_date_upper" placeholder="Upper Date Limit (not fully implemented)" class="form-control mr-sm-0">
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
         </div>
         <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">Search</button>
-      </form>      
-      <div id="content">
-        <div id="left">
-          <p1>You Searched: {{ text }}</p1>
-
-          {% for tweet_data in tweet_data_list %}
-          <div class="panel panel-info">
-            
-            <div class="panel-heading">
-              {% for key, value in tweet_data.items %}
-                {% if key == 'User Name' %}
-                  <b>{{ value }} </b>
-                {% endif %}
-              {% endfor %}
-              {% for key, value in tweet_data.items %}
-                {% if key == 'Screen Name' %}
-                  <i>@{{ value }}</i>
-                {% endif %}
-              {% endfor %}
-            </div>
-
-            <div class="panel-body">
-              {% for key, value in tweet_data.items %}
-                {% if key == 'Tweet Text' %}
-                  {{ value }}
-                {% endif %}
-              {% endfor %}
-            </div>
-
-            <div class="panel-footer">
-              {% for key, value in tweet_data.items %}
-                {% if key == 'Retweet Count' %}
-                  <b>{{ value }} </b>Retweets
-                {% endif %}
-              {% endfor %}
-
-              {% for key, value in tweet_data.items %}
-                {% if key == 'Favorite Count' %}
-                  <b>{{ value }} </b>Likes
-                {% endif %}
-              {% endfor %}
-
-              {% for key, value in tweet_data.items %}
-                {% if key == 'Tweet Created At' %}
-                  <i>{{ value }} </i>
-                {% endif %}
-              {% endfor %}
-            </div>
-
-          </div>
-          {% endfor %}
-        </div>
-        <div id="right">
-          <!-- THIS IS THE GRAPH DISPLAY -->
-          {{ div | safe }}
-          {{ script | safe }}
-        </div>
-      </div>
-
+      </form>
     </div>
 
-    <!-- Right column -->
-    <div class="col-sm-1">
-
+    <div class="col-sm-2">
     </div>
   </div>
 
+  <!-- Breaks for style seperations reasons -->
+  <br><br>
+
+  <!-- columns divide page in 3 parts -->
+  <div class="row">
+
+    <div class="col-sm-1">
+    </div>
+
+  	<!-- Left column -->
+    <div class="content" id="left">
+      {% if searchBool == True %}
+      <div id="content">
+        <p1>You Searched: <b>{{ text }}</b></p1>
+
+        {% for tweet_data in tweet_data_list %}
+        <div class="panel panel-info">
+          
+          <div class="panel-heading">
+            {% for key, value in tweet_data.items %}
+              {% if key == 'User Name' %}
+                <b>{{ value }} </b>
+              {% endif %}
+            {% endfor %}
+            {% for key, value in tweet_data.items %}
+              {% if key == 'Screen Name' %}
+                <i>@{{ value }}</i>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <div class="panel-body">
+            {% for key, value in tweet_data.items %}
+              {% if key == 'Tweet Text' %}
+                {{ value }}
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <div class="panel-footer">
+            {% for key, value in tweet_data.items %}
+              {% if key == 'Retweet Count' %}
+                <b>{{ value }} </b>Retweets
+              {% endif %}
+            {% endfor %}
+
+            {% for key, value in tweet_data.items %}
+              {% if key == 'Favorite Count' %}
+                <b>{{ value }} </b>Likes
+              {% endif %}
+            {% endfor %}
+
+            {% for key, value in tweet_data.items %}
+              {% if key == 'Tweet Created At' %}
+                <i>{{ value }} </i>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Right column -->
+    <div class="col-sm-5" id="right">
+      {% if searchBool == True %}
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <!-- <li data-target="#myCarousel" data-slide-to="2"></li>
+          <li data-target="#myCarousel" data-slide-to="3"></li> -->
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+          <div class="item active">
+            {{ div1 | safe }}
+                {{ script1 | safe }}
+          </div>
+
+          <div class="item">
+            {{ div2 | safe }}
+                {{ script2 | safe }}
+          </div>
+        </div>
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-1">
+          <i>History:</i>
+        </div>
+
+        <div class="col-sm-8">
+          <!--print history -->
+          
+          {% for search in history %}
+            <br><b>{{ search }}</b>
+          {% endfor %}
+        </div>
+
+        <div class="col-sm-3">
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-sm-1">
+    </div>
+
+  </div>
 {% endblock content %}
