@@ -190,10 +190,10 @@ class HomeView(View):
                 tools='hover, pan'
                 )
 
-            plot1.line(xs,zeros,line_width=4, color="red") # zeros line
-            plot1.line(xs,polar,line_width=2, color="red") # polar line
-            plot1.line(xs,halves,line_width=4, color="blue") # halves line
-            plot1.line(xs,subj,line_width=2,  color="blue") # subj line
+            #plot1.line(xs,zeros,line_width=4, color="red") # zeros line
+            #plot1.line(xs,polar,line_width=2, color="red") # polar line
+            #plot1.line(xs,halves,line_width=4, color="blue") # halves line
+            #plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             # plot1.line(xs,zeros,line_width=4, color="red") # zeros line
             plot1.vbar(x=xs,top=sorted(polar),width=0.5, color="red") # polar line
             plot2.vbar(x=xs,top=sorted(subj),width=0.5, color="blue") # subj line
