@@ -53,7 +53,8 @@
     </div>
 
   	<!-- Left column -->
-    <div class="content" id="left">
+    <!-- class was content-->
+    <div class="col-sm-5" id="left">
       {% if searchBool == True %}
       <div id="content">
         <p1>You Searched: <b>{{ text }}</b></p1>
@@ -143,28 +144,30 @@
           <span class="sr-only">Next</span>
         </a>
       </div>
-
-      <div class="row">
-        <div class="col-sm-1">
-          <i>History:</i>
-        </div>
-
-        <div class="col-sm-8">
-          <!--print history -->
-          
-          {% for search in history %}
-            <br><b>{{ search }}</b>
-          {% endfor %}
-        </div>
-
-        <div class="col-sm-3">
-        </div>
-      </div>
       {% endif %}
     </div>
 
     <div class="col-sm-1">
     </div>
 
+  </div>
+
+  <br>
+
+  <!-- History Bar at bottom -->
+  <div class="row">
+    <div class="col-sm-1">
+      <i>History:</i>
+    </div>
+
+    <div class="col-sm-8">
+      <!--print history -->  
+        {% for search in history %}
+          <a href=""><b>{{ search }}</b></a><p> • </p>
+        {% endfor %}
+    </div>
+
+    <div class="col-sm-3">
+    </div>
   </div>
 {% endblock content %}

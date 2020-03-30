@@ -54,44 +54,6 @@
 		<!-- active nav bar items -->
 		<li class="nav-item {{ home }}"><a class="nav-link {{ status0 }}" href="{% url 'home' %}" style="color: #00acee">Home</a><li>
 		<li class="nav-item {{ about }}"><a class="nav-link {{ status1 }}" href="{% url 'about' %}" style="color: #00acee">About</a></li>
-
-		<!-- Bell Button -->
-		{% if user.is_authenticated %}
-			<li class="nav-item dropdown">
-
-				<!-- Bell Button tab picture -->
-				<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-					<img src="https://i.ibb.co/WHP3vVm/notif-Bell.png" alt="" height="25" width ="25">
-				</a>
-
-				<!-- Dropdown Notification tab -->
-				<div class="dropdown-menu dropdown-menu-right">
-					<a class="dropdown-item" href="#">You have 2 notifications</a>
-				</div>
-			</li>
-		{% endif %}
-
-		<!-- Profile Button -->
-		<li class="nav-item dropdown">
-
-			<!-- Profile Icon-->
-			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-				<img src="https://i.ibb.co/jGJMs0d/profile.png" alt="" height="25" width ="25"> {{user.username}}
-			</a>
-
-			<!-- Profile Button Dropdown tab -->
-			<div class="dropdown-menu dropdown-menu-right">
-				{% if user.is_authenticated %}
-				<a class="dropdown-item" href="{% url 'profile' %}"><img src="https://icon-library.net/images/icon-profile/icon-profile-5.jpg" alt="" height="25" width ="25"> View Profile </a>
-				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="{% url 'logout' %}"><img src="https://icons-for-free.com/iconfiles/png/512/check+exit+log+off+logout+quit+sign+out+icon-1320183951265704602.png" alt="" height="25" width ="25"> Sign Out </a>
-				{% else %}
-				<a class="dropdown-item" href="{% url 'login' %}"><img src="https://i.ibb.co/5ctJf4W/check-exit-log-off-logout-quit-sign-out-icon-1320183951265704602.png" alt="" height="25" width ="25"> Sign In </a>
-				<a class="dropdown-item" href="{% url 'password_reset' %}">Forgot Password?</a>
-				<a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a>
-				{% endif %}
-			</div>
-		</li>
 	</ul>
 </header>
 
