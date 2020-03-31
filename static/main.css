@@ -16,6 +16,15 @@ h1, h2 a {
   height: 100%;
 }
 
+#trendText {
+  text-align: center;
+  color: #236D91;
+  font-size: large;
+  overflow: auto;
+  white-space: nowrap;
+  background-color: #D6EDF8;
+}
+
 #left {
   float: left;
   width: 100%;
@@ -24,12 +33,18 @@ h1, h2 a {
   box-sizing: border-box;
   padding: 0.5em;
   border: 0px;
+
 }
 
 #right {
   float: left;
-  width: 50%;
+  width: 45%;
   height: 100%;
   box-sizing: border-box;
   padding: 0.5em;
+}
+
+#history {
+  overflow: auto;
+  white-space: nowrap;
 }
