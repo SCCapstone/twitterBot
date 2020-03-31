@@ -54,11 +54,12 @@
 
   	<!-- Left column -->
     <!-- class was content-->
-    <div class="col-sm-5" id="left">
+    <div class="col-sm-5">
       {% if searchBool == True %}
-      <div id="content">
-        <p1>You Searched: <b>{{ text }}</b></p1>
+      
+      <pre style="text-align: center"><u><b>{{ text }}</b></u></pre>
 
+      <div id="left">
         {% for tweet_data in tweet_data_list %}
         <div class="panel panel-info">
           
