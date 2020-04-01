@@ -20,7 +20,7 @@
       <form method="GET" style="margin: 0; text-align: center;">
         {% csrf_token %}
         
-        <input  id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
+        <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
         <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold" class="form-control mr-sm-0">
         <input id="favorite_threshold" type="text" name="favorite_threshold" placeholder="Favorite Threshold" class="form-control mr-sm-0">
         <div class='input-group date' id='datetimepickerLower'>
@@ -126,10 +126,14 @@
             {{ div2 | safe }}
                 {{ script2 | safe }}
           </div>
+          <div class="item">
+            {{ div3 | safe }}
+                {{ script3 | safe }}
+          </div>
         </div>
 
         <!-- Left and right controls -->
-        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <!-- <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
           <span class="sr-only">Previous</span>
         </a>
@@ -137,7 +141,7 @@
         <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
           <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
           <span class="sr-only">Next</span>
-        </a>
+        </a> -->
       </div>
       {% endif %}
     </div>
