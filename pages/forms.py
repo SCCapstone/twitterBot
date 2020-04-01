@@ -16,5 +16,4 @@ class SearchForm(forms.Form):
     search = forms.CharField()
     retweet_threshold = forms.IntegerField(required = False)
     favorite_threshold = forms.IntegerField(required = False)
-    upper_date_limit = forms.CharField(required = False)
-    lower_date_limit = forms.CharField(required = False)
+    date_threshold = forms.CharField(required = False)

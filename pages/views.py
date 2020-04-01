@@ -12,7 +12,7 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.embed import components
 from bokeh.resources import INLINE
 from textblob import TextBlob
-from datetime import datetime #####
+from datetime import datetime, timedelta
 import random, tweepy, sys
 
 
@@ -52,17 +52,15 @@ class HomeView(View):
             #upper_date_string = ''
             retweet_threshold_number = 0
             favorite_threshold_number = 0
+            date_threshold_datetime = datetime.now()-timedelta(seconds=1)
             #check if the content of the field is present
             if form.cleaned_data['retweet_threshold']:
                 retweet_threshold_number = form.cleaned_data['retweet_threshold']
             if form.cleaned_data['favorite_threshold']:
                 favorite_threshold_number = form.cleaned_data['favorite_threshold']
-            #if form.cleaned_data['upper_date_limit']:
-            #    upper_date_string = form.cleaned_data['upper_date_limit']
-            #    upper_datetime = datetime.strptime(upper_date_string, '%m/%d/%Y %I:%M %p').date()
-            #if form.cleaned_data['lower_date_limit']:
-            #    lower_date_string = form.cleaned_data['lower_date_limit']
-            #    lower_datetime = datetime.strptime(lower_date_string, '%m/%d/%Y %I:%M %p').date()
+            if form.cleaned_data['date_threshold']:
+                date_threshold_string = form.cleaned_data['date_threshold']
+                date_threshold_datetime = datetime.strptime(date_threshold_string, '%m/%d/%Y %I:%M %p')
 
             # pulling current history and adding latest search 
             history_cookie = str(request.COOKIES.get("searches")) + search_text + " "
@@ -82,7 +80,7 @@ class HomeView(View):
             subj= []
 
             # putting tweet_data into a dict
-            for tweet_data in tweepy.Cursor(api.search, q = search_text, tweet_mode = 'extended', lang = 'en').items(100):
+            for tweet_data in tweepy.Cursor(api.search, q = search_text, until = None, tweet_mode = 'extended', lang = 'en').items(100):
                 #if retweeted status exists in tweet_data a little workaround is needed
                 #to get the correct data from the tweet_data
                 tweet = ''
@@ -102,7 +100,10 @@ class HomeView(View):
                 if favorite_count < favorite_threshold_number:
                     continue
                 #handles user upper and lower limit on dates
-                tweet_created = tweet_data.created_at#.date()
+                #if tweet_data.created_at > lower_datetime and tweet_data.created_at < upper_datetime:
+                #    continue
+                #tweet_created = tweet_data.created_at#.date()
+
                 #upper_datetime = datetime.strptime(upper_date_string, '%m/%d/%Y %I:%M %p')
                 #upper_date = upper_datetime.date()
                 #lower_datetime = datetime.strptime(lower_date_string, '%m/%d/%Y %I:%M %p')
