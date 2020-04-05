@@ -14,7 +14,7 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('username', 'email')
 
 class SearchForm(forms.Form):
-    search = forms.CharField()
+    search = forms.CharField(max_length=100)
     retweet_threshold = forms.IntegerField(required = False)
     favorite_threshold = forms.IntegerField(required = False)
     date_threshold = forms.CharField(required = False)
