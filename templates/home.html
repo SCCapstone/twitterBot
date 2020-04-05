@@ -14,22 +14,11 @@
 
   <br>
   <div class="row">
-    <div class="col-sm-1" style="padding-left: 35px">
-      <!-- put button here -->
-      <form method="post">
-        {% csrf_token %}
-        <button type="button" class="btn btn-info"  style="background-color: #00acee" type="submit" onclick="delete_cookies()">Delete Cookies</button>
-      </form>
+
+    <div class="col-sm-10">
     </div>
 
-    <div class="col-sm-1">
-      
-    </div>
-
-    <div class="col-sm-8">
-    </div>
-
-    <div class="col-sm-1">
+    <div class="col-sm-2">
       <!-- Trigger the modal with a button -->
       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="background-color: #00acee">Cookie Warning</button>
       <!-- Modal -->
@@ -48,9 +37,14 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-1">
+      <br><br>
+
+      <!-- put button here -->
+      <form method="post">
+        {% csrf_token %}
+        <button type="button" class="btn btn-info"  style="background-color: #00acee" type="submit" onclick="delete_cookies()">Delete Cookies</button>
+      </form>
     </div>
   </div>
 
