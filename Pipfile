@@ -13,9 +13,6 @@ tweepy = "==3.8.0"
 textblob = "==0.15.3"
 nltk = "==3.4.5"
 whitenoise = "*"
+pandas = "*"
 
 [requires]
-# Pipenv doesn't allow multiple versions of
-# python requirements. So we have temporarily
-# removed this requirement. We are using python versions
-# 3.5 or later ststed in the readme.

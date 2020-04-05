@@ -8,23 +8,24 @@ from django.views import generic
 from django.http import HttpResponse
 from .forms import CustomUserCreationForm, SearchForm
 from bokeh.layouts import column
-from bokeh.plotting import figure, output_file, show
+from bokeh.plotting import *
 from bokeh.embed import components
 from bokeh.resources import INLINE
 from textblob import TextBlob
+
+from math import pi
+
+import pandas as pd
+
+from bokeh.io import output_file, show
+from bokeh.palettes import Category20c
+from bokeh.transform import cumsum
+
 from datetime import datetime, timedelta
 import random, tweepy, sys
 
 
 # create views here
-
-@method_decorator(login_required, name='dispatch')
-class ProfileView(View):
-    def get(self, request):
-        context = {
-
-        }
-        return render(request,'profile.html',context)
 
 class HomeView(View):
 
@@ -48,8 +49,6 @@ class HomeView(View):
 
             #Advanced Search Input Here
             #declare variables because not all fields of the form are required
-            #lower_date_string = ''
-            #upper_date_string = ''
             retweet_threshold_number = 0
             favorite_threshold_number = 0
             date_threshold_datetime = datetime.now()-timedelta(seconds=1)
@@ -99,22 +98,6 @@ class HomeView(View):
                 #handles user input of favorite threshold
                 if favorite_count < favorite_threshold_number:
                     continue
-                #handles user upper and lower limit on dates
-                #if tweet_data.created_at > lower_datetime and tweet_data.created_at < upper_datetime:
-                #    continue
-                #tweet_created = tweet_data.created_at#.date()
-
-                #upper_datetime = datetime.strptime(upper_date_string, '%m/%d/%Y %I:%M %p')
-                #upper_date = upper_datetime.date()
-                #lower_datetime = datetime.strptime(lower_date_string, '%m/%d/%Y %I:%M %p')
-                #lower_date = lower_datetime.date()
-                #if (upper_datetime < tweet_created):
-                #    print(upper_datetime)
-                #    print('<')
-                #    print(tweet_created)
-                #    continue
-                #if (lower_datetime > tweet_created):
-                #    continue
 
                 #dict for holding all the data related to the tweet
                 tweet_dict = {
@@ -179,6 +162,7 @@ class HomeView(View):
                 plot_width=400,
                 plot_height=400,
                 sizing_mode='scale_width',
+                border_fill_color='#d6edf8',
                 tools='hover, pan'
                 )
             plot2 = figure(
@@ -188,8 +172,19 @@ class HomeView(View):
                 plot_width=400,
                 plot_height=400,
                 sizing_mode='scale_width',
+                border_fill_color='#d6edf8',
                 tools='hover, pan'
                 )
+            x = { 'United States': 157, 'United Kingdom': 93, 'Japan': 89, 'China': 63, 'Germany': 44, 'India': 42, 'Italy': 40, 'Australia': 35, 'Brazil': 32, 'France': 31, 'Taiwan': 31, 'Spain': 29 }
+
+            data = pd.Series(x).reset_index(name='value').rename(columns={'index':'country'})
+            data['angle'] = data['value']/data['value'].sum() * 2*pi
+            data['color'] = Category20c[len(x)]
+
+            plot3 = figure(plot_height=350, title="Pie Chart", toolbar_location=None, tools="hover", tooltips="@country: @value")
+
+            plot3.wedge(x=0, y=1, radius=0.4, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'), line_color="white", fill_color='color', legend='country', source=data)
+
 
             #plot1.line(xs,zeros,line_width=4, color="red") # zeros line
             #plot1.line(xs,polar,line_width=2, color="red") # polar line
@@ -211,14 +206,18 @@ class HomeView(View):
             col.sizing_mode = 'scale_width'
             col2 = column([plot2])
             col2.sizing_mode = 'scale_width'
+            col3 = column([plot3])
+            col3.sizing_mode = 'scale_width'
 
             script1, div1 = components(col)
             script2, div2 = components(col2)
+            script3, div3 = components(col3)
 
             #containing items to be returned to html page
             context = {
                 'title': 'Home',
                 'status0': 'active',
+            #    'form': form,
                 'text': search_text,
                 'searchBool' : search_bool,
                 'tweet_data_list': tweet_data_list,
@@ -228,6 +227,8 @@ class HomeView(View):
                 'div1': div1,
                 'script2': script2,
                 'div2': div2,
+                'script3': script3,
+                'div3': div3,
                 'history': history,
             }
             # returning response and setting cookie
@@ -238,8 +239,10 @@ class HomeView(View):
 
         #if the form is not valid (aka: empty search)
         else:
+            form = SearchForm()
             context = {
                 'title': 'Home',
+                'form': form,
             }
             response = render(request, 'home.html', context)
             # response.set_cookie('test', 'success')
@@ -257,10 +260,3 @@ class AboutView(View):
         }
         status = 'active'
         return render(request, 'about.html', context)
-
-class SignUp(generic.CreateView):
-
-    #define variables here
-    form_class = CustomUserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'signup.html'

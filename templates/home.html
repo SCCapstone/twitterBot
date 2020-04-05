@@ -9,6 +9,36 @@
  });
 </script>
 
+  <br>
+  <div class="row">
+    <div class="col-sm-10">
+    </div>
+
+    <div class="col-sm-1">
+      <!-- Trigger the modal with a button -->
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="background-color: #00acee">Cookie Warning</button>
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Cookie Warning</h4>
+            </div>
+            <div class="modal-body">
+              <p>This website uses cookies to track search history for our users.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-info" data-dismiss="modal">Got it!</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-1">
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-sm-2">
     </div>
@@ -17,17 +47,20 @@
       <!-- header temporary holder for logo-->
       <h1 style="text-align: center; padding-top: 150px; color: #00acee; font-family: 'Courier New', Times, monospace;"> tweetBot. </h1>
 
-      <form method="post" style="margin: 0; text-align: center;">
+      <form method="GET" style="margin: 0; text-align: center;">
         {% csrf_token %}
-        
-        <input  id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
+        <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
+        {{ form.search.errors }}
         <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold" class="form-control mr-sm-0">
+        {{ form.retweet_threshold.errors }}
         <input id="favorite_threshold" type="text" name="favorite_threshold" placeholder="Favorite Threshold" class="form-control mr-sm-0">
+        {{ form.favorite_threshold.errors }}
         <div class='input-group date' id='datetimepickerLower'>
           <input id="date_threshold" type="text" name="date_threshold" placeholder="Date Threshold (only up to 7 days in the past)" class="form-control mr-sm-0">
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-calendar"></span>
           </span>
+          {{ form.date_threshold.errors }}
         </div>
         <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">Search</button>
       </form>
@@ -126,10 +159,14 @@
             {{ div2 | safe }}
                 {{ script2 | safe }}
           </div>
+          <div class="item">
+            {{ div3 | safe }}
+                {{ script3 | safe }}
+          </div>
         </div>
 
         <!-- Left and right controls -->
-        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <!-- <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
           <span class="sr-only">Previous</span>
         </a>
@@ -137,7 +174,7 @@
         <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
           <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
           <span class="sr-only">Next</span>
-        </a>
+        </a> -->
       </div>
       {% endif %}
     </div>
