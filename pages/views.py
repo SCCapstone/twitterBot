@@ -51,15 +51,14 @@ class HomeView(View):
             #declare variables because not all fields of the form are required
             retweet_threshold_number = 0
             favorite_threshold_number = 0
-            date_threshold_datetime = ''
+            date_threshold = None
             #check if the content of the field is present
             if form.cleaned_data['retweet_threshold']:
                 retweet_threshold_number = form.cleaned_data['retweet_threshold']
             if form.cleaned_data['favorite_threshold']:
                 favorite_threshold_number = form.cleaned_data['favorite_threshold']
             if form.cleaned_data['date_threshold']:
-                date_threshold_string = form.cleaned_data['date_threshold']
-                date_threshold_datetime = datetime.strptime(date_threshold_string, '%m/%d/%Y %I:%M %p')
+                date_threshold = form.cleaned_data['date_threshold']
 
             # pulling current history and adding latest search 
             history_cookie = str(request.COOKIES.get("searches")) + search_text + "+++++"
@@ -79,7 +78,7 @@ class HomeView(View):
             subj= []
 
             # putting tweet_data into a dict
-            for tweet_data in tweepy.Cursor(api.search, q = search_text, until = date_threshold_datetime, tweet_mode = 'extended', lang = 'en').items(100):
+            for tweet_data in tweepy.Cursor(api.search, q = search_text, until = date_threshold, tweet_mode = 'extended', lang = 'en').items(100):
                 #if retweeted status exists in tweet_data a little workaround is needed
                 #to get the correct data from the tweet_data
                 tweet = ''
@@ -227,7 +226,6 @@ class HomeView(View):
             context = {
                 'title': 'Home',
                 'status0': 'active',
-                #'form': form,
                 'text': search_text,
                 'searchBool' : search_bool,
                 'tweet_data_list': tweet_data_list,

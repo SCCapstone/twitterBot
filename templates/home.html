@@ -55,22 +55,13 @@
         {{ form.retweet_threshold.errors }}
         <input id="favorite_threshold" type="text" name="favorite_threshold" placeholder="Favorite Threshold (must be positive)" class="form-control mr-sm-0">
         {{ form.favorite_threshold.errors }}
-        <div class='input-group date' id='datetimepickerLower'>
-          <input id="date_threshold" type="text" name="date_threshold" placeholder="Date Threshold (only up to 7 days in the past)" class="form-control mr-sm-0">
-          <span class="input-group-addon">
-            <span class="glyphicon glyphicon-calendar"></span>
-          </span>
-        </div>
+        <input id="date_threshold" type="date" name="date_threshold" placeholder="mm/dd/yyyy hh:mm am (only up to 7 days in the past)" class="form-control mr-sm-0">
         {{ form.date_threshold.errors }}
         <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">Search</button>
       </form>
     </div>
 
-<<<<<<< HEAD
     <div style="padding-right: 0px"; class="col-sm-2">
-=======
-    <div style="padding-right: 0px;" class="col-sm-2">
->>>>>>> 84cc0a2a9cbdcf95f9314a7e0bfc572053375794
     </div>
   </div>
 

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser
-from datetime import timedelta, datetime
+from datetime import timedelta, date
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -17,7 +17,7 @@ class SearchForm(forms.Form):
     search = forms.CharField(max_length=100, required = False)
     retweet_threshold = forms.IntegerField(required = False)
     favorite_threshold = forms.IntegerField(required = False)
-    date_threshold = forms.CharField(required = False)
+    date_threshold = forms.DateField (required = False)
 
     def clean_search(self):
         data = self.cleaned_data.get('search')
@@ -43,10 +43,9 @@ class SearchForm(forms.Form):
 
     def clean_date_threshold(self):
         data = self.cleaned_data.get('date_threshold')
-        if data == '':
+        if data == None:
             return data
-        data_datetime = datetime.strptime(data, '%m/%d/%Y %I:%M %p')
-        if data_datetime < datetime.now()-timedelta(days=7):
+        if data < date.today()-timedelta(days=7):
             raise forms.ValidationError('Enter a valid date! (no more than 7 days in the past)')
         return data
 
