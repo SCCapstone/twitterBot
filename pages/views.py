@@ -177,7 +177,7 @@ class HomeView(View):
                 )
             x = { 'Positive': pos, 'Negative': neg, 'Neutral': neutral }
 
-            data = pd.Series(x).reset_index(name='value').rename(columns={'index':'country'})
+            data = pd.Series(x).reset_index(name='value').rename(columns={'index':'polarity'})
             data['angle'] = data['value']/data['value'].sum() * 2*pi
             data['color'] = ('blue', 'red', 'gray')
 
@@ -189,9 +189,9 @@ class HomeView(View):
                 border_fill_color='#d6edf8',
                 toolbar_location=None, 
                 tools="hover, pan", 
-                tooltips="@country: @value")
+                tooltips="@polarity: @value")
 
-            plot3.wedge(x=-1, y=1, radius=0.7, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'), line_color="white", fill_color='color', legend='country', source=data)
+            plot3.wedge(x=-1, y=1, radius=0.7, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'), line_color="white", fill_color='color', legend='polarity', source=data)
 
 
             #plot1.line(xs,zeros,line_width=4, color="red") # zeros line

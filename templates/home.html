@@ -144,6 +144,7 @@
         <ol class="carousel-indicators">
           <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
           <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
           <!-- <li data-target="#myCarousel" data-slide-to="2"></li>
           <li data-target="#myCarousel" data-slide-to="3"></li> -->
         </ol>
@@ -195,9 +196,12 @@
     <div class="col-sm-10">
       <!--print history -->
       <!--<pre id="history"><i><b>History:</b></i>   {% for search in history %}<a href="" type="submit"><b>{{ search }}</b></a> • {% endfor %}-->
+        <!--<input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">-->
+
+
       <form method="GET"  style="margin: 0; text-align: center;">
         {% csrf_token %}
-        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<button id="history_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">{{ search }}</button> • {% endfor %}
+        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}
         </pre>
       </form>
     </div>
