@@ -66,7 +66,11 @@
       </form>
     </div>
 
+<<<<<<< HEAD
     <div style="padding-right: 0px"; class="col-sm-2">
+=======
+    <div style="padding-right: 0px;" class="col-sm-2">
+>>>>>>> 84cc0a2a9cbdcf95f9314a7e0bfc572053375794
     </div>
   </div>
 
@@ -124,11 +128,28 @@
               {% endif %}
             {% endfor %}
 
+            <br>
+
+            {% for key, value in tweet_data.items %}
+              {% if key == 'Tweet Polarity' %}
+                <b>{{ value }} </b>Polarity
+              {% endif %}
+            {% endfor %}
+
+            {% for key, value in tweet_data.items %}
+              {% if key == 'Tweet Subjectivity' %}
+                <b>{{ value }} </b>Subjectivity
+              {% endif %}
+            {% endfor %}
+
+            <br>
+
             {% for key, value in tweet_data.items %}
               {% if key == 'Tweet Created At' %}
                 <i>{{ value }} </i>
               {% endif %}
             {% endfor %}
+            
           </div>
         </div>
         {% endfor %}

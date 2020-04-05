@@ -62,9 +62,9 @@ class HomeView(View):
                 date_threshold_datetime = datetime.strptime(date_threshold_string, '%m/%d/%Y %I:%M %p')
 
             # pulling current history and adding latest search 
-            history_cookie = str(request.COOKIES.get("searches")) + search_text + " "
+            history_cookie = str(request.COOKIES.get("searches")) + search_text + "+++++"
             # setting string from cookie to an array called history 
-            history = history_cookie[4:(len(history_cookie))-1].split(" ")
+            history = history_cookie[4:(len(history_cookie))-5].split("+++++")
             
             #Tweepy Authentication
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
@@ -113,7 +113,9 @@ class HomeView(View):
                 'Phone Type': tweet_data.source,
                 'Favorite Count': favorite_count,
                 'Favorited': tweet_data.favorited,
-                'Replied': tweet_data.in_reply_to_status_id_str
+                'Replied': tweet_data.in_reply_to_status_id_str,
+                'Tweet Polarity' : round(TextBlob(tweet).sentiment.polarity, 2),
+                'Tweet Subjectivity' : round(TextBlob(tweet).sentiment.subjectivity, 2),
                 }
                 tweet_data_list.append(tweet_dict)
 
@@ -179,7 +181,7 @@ class HomeView(View):
 
             data = pd.Series(x).reset_index(name='value').rename(columns={'index':'polarity'})
             data['angle'] = data['value']/data['value'].sum() * 2*pi
-            data['color'] = ('blue', 'red', 'gray')
+            data['color'] = ('#236D91', 'firebrick', '#D6EDF8')
 
             plot3 = figure(
                 title='Polarity of Tweets Pie Chart',
@@ -199,8 +201,8 @@ class HomeView(View):
             #plot1.line(xs,halves,line_width=4, color="blue") # halves line
             #plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             # plot1.line(xs,zeros,line_width=4, color="red") # zeros line
-            plot1.vbar(x=xs,top=sorted(polar),width=0.5, color="red") # polar line
-            plot2.vbar(x=xs,top=sorted(subj),width=0.5, color="blue") # subj line
+            plot1.vbar(x=xs,top=sorted(polar),width=0.5, color="#236D91") # polar line
+            plot2.vbar(x=xs,top=sorted(subj),width=0.5, color="#236D91") # subj line
 
             # plot1.line(xs,halves,line_width=4, color="blue") # halves line
             # plot1.line(xs,subj,line_width=2,  color="blue") # subj line
