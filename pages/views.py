@@ -51,7 +51,7 @@ class HomeView(View):
             #declare variables because not all fields of the form are required
             retweet_threshold_number = 0
             favorite_threshold_number = 0
-            date_threshold_datetime = datetime.now()-timedelta(seconds=1)
+            date_threshold_datetime = ''
             #check if the content of the field is present
             if form.cleaned_data['retweet_threshold']:
                 retweet_threshold_number = form.cleaned_data['retweet_threshold']
@@ -79,7 +79,7 @@ class HomeView(View):
             subj= []
 
             # putting tweet_data into a dict
-            for tweet_data in tweepy.Cursor(api.search, q = search_text, until = None, tweet_mode = 'extended', lang = 'en').items(100):
+            for tweet_data in tweepy.Cursor(api.search, q = search_text, until = date_threshold_datetime, tweet_mode = 'extended', lang = 'en').items(100):
                 #if retweeted status exists in tweet_data a little workaround is needed
                 #to get the correct data from the tweet_data
                 tweet = ''
@@ -239,6 +239,7 @@ class HomeView(View):
 
         #if the form is not valid (aka: empty search)
         else:
+            #form = SearchForm()
             context = {
                 'title': 'Home',
                 'form': form,
