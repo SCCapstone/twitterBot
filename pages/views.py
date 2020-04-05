@@ -62,9 +62,9 @@ class HomeView(View):
                 date_threshold_datetime = datetime.strptime(date_threshold_string, '%m/%d/%Y %I:%M %p')
 
             # pulling current history and adding latest search 
-            history_cookie = str(request.COOKIES.get("searches")) + search_text + " "
+            history_cookie = str(request.COOKIES.get("searches")) + search_text + "+++++"
             # setting string from cookie to an array called history 
-            history = history_cookie[4:(len(history_cookie))-1].split(" ")
+            history = history_cookie[4:(len(history_cookie))-5].split("+++++")
             
             #Tweepy Authentication
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
