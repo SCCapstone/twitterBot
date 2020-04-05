@@ -7,6 +7,9 @@
   $(function () {
     $('#datetimepickerLower').datetimepicker();
  });
+  function delete_cookies() {
+    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+  }
 </script>
 
   <br>
@@ -15,7 +18,7 @@
       <!-- put button here -->
       <form method="post">
         {% csrf_token %}
-        <button type="button" class="btn btn-info"  style="background-color: #00acee" type="submit" name="run_script">Cookie Warning</button>
+        <button type="button" class="btn btn-info"  style="background-color: #00acee" type="submit" onclick="delete_cookies()">Delete Cookies</button>
       </form>
     </div>
 
