@@ -11,11 +11,16 @@
 
   <br>
   <div class="row">
-    <div class="col-sm-1">
+    <div class="col-sm-1" style="padding-left: 35px">
+      <!-- put button here -->
+      <form method="post">
+        {% csrf_token %}
+        <button type="button" class="btn btn-info"  style="background-color: #00acee" type="submit" name="run_script">Cookie Warning</button>
+      </form>
     </div>
 
     <div class="col-sm-1">
-      <!-- put button here -->
+      
     </div>
 
     <div class="col-sm-8">
