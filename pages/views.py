@@ -113,7 +113,9 @@ class HomeView(View):
                 'Phone Type': tweet_data.source,
                 'Favorite Count': favorite_count,
                 'Favorited': tweet_data.favorited,
-                'Replied': tweet_data.in_reply_to_status_id_str
+                'Replied': tweet_data.in_reply_to_status_id_str,
+                'Tweet Polarity' : round(TextBlob(tweet).sentiment.polarity, 2),
+                'Tweet Subjectivity' : round(TextBlob(tweet).sentiment.subjectivity, 2),
                 }
                 tweet_data_list.append(tweet_dict)
 
