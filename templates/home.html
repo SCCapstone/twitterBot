@@ -17,7 +17,7 @@
       <!-- header temporary holder for logo-->
       <h1 style="text-align: center; padding-top: 150px; color: #00acee; font-family: 'Courier New', Times, monospace;"> tweetBot. </h1>
 
-      <form method="GET" style="margin: 0; text-align: center;">
+      <form method="post" style="margin: 0; text-align: center;">
         {% csrf_token %}
         
         <input  id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
@@ -157,8 +157,12 @@
 
     <div class="col-sm-10">
       <!--print history -->
-      <pre id="history"><i><b>History:</b></i>   {% for search in history %}<a href=""><b>{{ search }}</b></a> • {% endfor %}
-      </pre>
+      <!--<pre id="history"><i><b>History:</b></i>   {% for search in history %}<a href="" type="submit"><b>{{ search }}</b></a> • {% endfor %}-->
+      <form method="GET"  style="margin: 0; text-align: center;">
+        {% csrf_token %}
+        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<button id="history_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">{{ search }}</button> • {% endfor %}
+        </pre>
+      </form>
     </div>
 
     <div class="col-sm-1">
