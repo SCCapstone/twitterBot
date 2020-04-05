@@ -7,14 +7,19 @@
   $(function () {
     $('#datetimepickerLower').datetimepicker();
  });
+  function delete_cookies() {
+    document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+    location.reload(true);
+  }
 </script>
 
   <br>
   <div class="row">
+
     <div class="col-sm-10">
     </div>
 
-    <div class="col-sm-1">
+    <div class="col-sm-2">
       <!-- Trigger the modal with a button -->
       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="background-color: #00acee">Cookie Warning</button>
       <!-- Modal -->
@@ -33,9 +38,14 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-1">
+      <br><br>
+
+      <!-- put button here -->
+      <form method="post">
+        {% csrf_token %}
+        <button type="button" class="btn btn-info"  style="background-color: #00acee" type="submit" onclick="delete_cookies()">Delete Cookies</button>
+      </form>
     </div>
   </div>
 
@@ -123,7 +133,13 @@
 
             {% for key, value in tweet_data.items %}
               {% if key == 'Tweet Polarity' %}
-                <b>{{ value }} </b>Polarity
+                {% if value > 0 %}
+                  <b style="color: green">{{ value }} </b>Polarity
+                {% elif value < 0 %}
+                  <b style="color: firebrick">{{ value }} </b>Polarity
+                {% else %}
+                  <b>{{ value }} </b>Polarity
+                {% endif %}
               {% endif %}
             {% endfor %}
 
@@ -151,7 +167,7 @@
     <!-- Right column -->
     <div class="col-sm-5" id="right">
       {% if searchBool == True %}
-      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <div id="myCarousel" class="carousel slide" data-ride="carousel" style="padding-bottom: 15px;">
         <!-- Indicators -->
         <ol class="carousel-indicators">
           <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -211,9 +227,8 @@
 
       <form method="GET"  style="margin: 0; text-align: center;">
         {% csrf_token %}
-        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}
+        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}</form>
         </pre>
-      </form>
     </div>
 
     <div class="col-sm-1">

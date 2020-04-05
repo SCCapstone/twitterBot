@@ -37,7 +37,7 @@ ol.carousel-indicators li {
   border-radius: 0;
   border: 1;
   border-color:'white';
-  background-color:black;
+  background-color: #F5F5F5;
 }
 ol.carousel-indicators li.active {
   float: left;
@@ -46,7 +46,7 @@ ol.carousel-indicators li.active {
   margin: 0;
   border-radius: 0;
   border: 0;
-  background-color:#236d91;
+  background-color: #D6EDF8;
 }
 
 #content {
