@@ -9,6 +9,7 @@
  });
   function delete_cookies() {
     document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+    location.reload(true);
   }
 </script>
 
@@ -233,9 +234,8 @@
 
       <form method="GET"  style="margin: 0; text-align: center;">
         {% csrf_token %}
-        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}
+        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}</form>
         </pre>
-      </form>
     </div>
 
     <div class="col-sm-1">
