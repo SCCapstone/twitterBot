@@ -11,7 +11,14 @@
 
   <br>
   <div class="row">
-    <div class="col-sm-10">
+    <div class="col-sm-1">
+    </div>
+
+    <div class="col-sm-1">
+      <!-- put button here -->
+    </div>
+
+    <div class="col-sm-8">
     </div>
 
     <div class="col-sm-1">
@@ -128,7 +135,13 @@
 
             {% for key, value in tweet_data.items %}
               {% if key == 'Tweet Polarity' %}
-                <b>{{ value }} </b>Polarity
+                {% if value > 0 %}
+                  <b style="color: green">{{ value }} </b>Polarity
+                {% elif value < 0 %}
+                  <b style="color: firebrick">{{ value }} </b>Polarity
+                {% else %}
+                  <b>{{ value }} </b>Polarity
+                {% endif %}
               {% endif %}
             {% endfor %}
 
