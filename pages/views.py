@@ -217,7 +217,7 @@ class HomeView(View):
             context = {
                 'title': 'Home',
                 'status0': 'active',
-            #    'form': form,
+                #'form': form,
                 'text': search_text,
                 'searchBool' : search_bool,
                 'tweet_data_list': tweet_data_list,
@@ -239,7 +239,6 @@ class HomeView(View):
 
         #if the form is not valid (aka: empty search)
         else:
-            form = SearchForm()
             context = {
                 'title': 'Home',
                 'form': form,
