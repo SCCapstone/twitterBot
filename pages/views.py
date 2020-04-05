@@ -175,15 +175,23 @@ class HomeView(View):
                 border_fill_color='#d6edf8',
                 tools='hover, pan'
                 )
-            x = { 'United States': 157, 'United Kingdom': 93, 'Japan': 89, 'China': 63, 'Germany': 44, 'India': 42, 'Italy': 40, 'Australia': 35, 'Brazil': 32, 'France': 31, 'Taiwan': 31, 'Spain': 29 }
+            x = { 'Positive': pos, 'Negative': neg, 'Neutral': neutral }
 
             data = pd.Series(x).reset_index(name='value').rename(columns={'index':'country'})
             data['angle'] = data['value']/data['value'].sum() * 2*pi
-            data['color'] = Category20c[len(x)]
+            data['color'] = ('blue', 'red', 'gray')
 
-            plot3 = figure(plot_height=350, title="Pie Chart", toolbar_location=None, tools="hover", tooltips="@country: @value")
+            plot3 = figure(
+                title='Polarity of Tweets Pie Chart',
+                plot_height=350,
+                plot_width=350, 
+                sizing_mode='scale_width',
+                border_fill_color='#d6edf8',
+                toolbar_location=None, 
+                tools="hover, pan", 
+                tooltips="@country: @value")
 
-            plot3.wedge(x=0, y=1, radius=0.4, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'), line_color="white", fill_color='color', legend='country', source=data)
+            plot3.wedge(x=-1, y=1, radius=0.7, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'), line_color="white", fill_color='color', legend='country', source=data)
 
 
             #plot1.line(xs,zeros,line_width=4, color="red") # zeros line
