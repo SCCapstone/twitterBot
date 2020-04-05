@@ -27,14 +27,6 @@ import random, tweepy, sys
 
 # create views here
 
-@method_decorator(login_required, name='dispatch')
-class ProfileView(View):
-    def get(self, request):
-        context = {
-
-        }
-        return render(request,'profile.html',context)
-
 class HomeView(View):
 
     def get(self, request):
@@ -283,10 +275,3 @@ class AboutView(View):
         }
         status = 'active'
         return render(request, 'about.html', context)
-
-class SignUp(generic.CreateView):
-
-    #define variables here
-    form_class = CustomUserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'signup.html'
