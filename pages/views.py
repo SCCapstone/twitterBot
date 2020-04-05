@@ -250,6 +250,7 @@ class HomeView(View):
             #form = SearchForm()
             context = {
                 'title': 'Home',
+                'searchBool': search_bool,
                 'form': form,
             }
             response = render(request, 'home.html', context)
