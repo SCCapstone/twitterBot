@@ -60,7 +60,9 @@
       <form method="GET" style="margin: 0; text-align: center;">
         {% csrf_token %}
         <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
-        {{ form.search.errors }}
+        {% if searchBool == False %}
+          {{ form.search.errors }}
+        {% endif %}
         <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold (must be positive)" class="form-control mr-sm-0">
         {{ form.retweet_threshold.errors }}
         <input id="favorite_threshold" type="text" name="favorite_threshold" placeholder="Favorite Threshold (must be positive)" class="form-control mr-sm-0">
