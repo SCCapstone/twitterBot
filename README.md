@@ -27,7 +27,7 @@ We are building a twitter data-scraping software that will fetch tweets based on
 
   Firefox: npm install -g geckodriver
 
-  selenium-side-runner tests/twitterBot_behavior_login.side
+  selenium-side-runner tests/basicTest.side
 
 ### Authors:
   1. Joey O'Neill jtoneill@email.sc.edu
