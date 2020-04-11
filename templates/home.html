@@ -105,7 +105,7 @@
             {% endfor %}
             {% for key, value in tweet_data.items %}
               {% if key == 'Screen Name' %}
-                <i>@{{ value }}</i>
+                <a href="https://twitter.com/{{value}}" target="_blank"><i>@{{ value }}</i></a>
               {% endif %}
             {% endfor %}
           </div>
