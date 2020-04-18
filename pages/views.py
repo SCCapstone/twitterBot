@@ -92,16 +92,7 @@ class HomeView(View):
                     favorite_count = tweet_data.favorite_count
 
                 tweet_in_ListForm = tweet.split()
-                tweetURL_BoolList = []
-                tweetSearchTerm_BoolList = []
-
-                for word in tweet_in_ListForm:
-                    if word.startswith("http://t.co"):
-                        tweetURL_BoolList.append(True)
-                    else:
-                        tweetURL_BoolList.append(False)
-                    
-                    tweetSearchTerm_BoolList.append(False)
+                tweetURL = f"https://twitter.com/{tweet_data.user.screen_name}/status/{tweet_data.id}"
 
                 #advanced search handlers
                 #handles user input of retweet_threshold
@@ -129,8 +120,8 @@ class HomeView(View):
                 'Tweet Polarity' : round(TextBlob(tweet).sentiment.polarity, 2),
                 'Tweet Subjectivity' : round(TextBlob(tweet).sentiment.subjectivity, 2),
                 'ListLength' : len(tweet_in_ListForm),
-                'URLBoolArr' : tweetURL_BoolList,
                 'tweetInListForm' : tweet_in_ListForm,
+                'tweetURL' : tweetURL,
                 }
                 tweet_data_list.append(tweet_dict)
 
