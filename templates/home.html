@@ -123,14 +123,14 @@
             {% for key, value in tweet_data.items %}
               {% if key == 'tweetInListForm' %}
                 {% for word in value %}
-                  {% if word == text %}
+                  {% if word == text%}
                     <b>{{ word }}</b>
                   {% else %}
                     {{ word }}
                   {% endif %}
                 {% endfor %}
               {% endif %}
-            {% endfor %}-->
+            {% endfor %}<br><br>-->
 
             {% for key, value in tweet_data.items %}
               {% if key == 'tweetURL' %}

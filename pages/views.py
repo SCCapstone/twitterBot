@@ -125,6 +125,11 @@ class HomeView(View):
                 }
                 tweet_data_list.append(tweet_dict)
 
+            # Sort tweet_data_list by polarity in ascending order
+            def myFunc(e):
+                return e['Tweet Polarity']
+            tweet_data_list.sort(key=myFunc)
+
             #use TextBlob to analyze sentiment polarity and subjectivity
             #append the results to the coordinates list
             for tweet_data in tweet_data_list:
