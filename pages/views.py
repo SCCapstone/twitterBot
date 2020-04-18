@@ -46,6 +46,7 @@ class HomeView(View):
 
             #User Input
             search_text = form.cleaned_data['search']
+            search_text_list = search_text.split()
 
             #Advanced Search Input Here
             #declare variables because not all fields of the form are required
@@ -90,6 +91,18 @@ class HomeView(View):
                     tweet = tweet_data.full_text
                     favorite_count = tweet_data.favorite_count
 
+                tweet_in_ListForm = tweet.split()
+                tweetURL_BoolList = []
+                tweetSearchTerm_BoolList = []
+
+                for word in tweet_in_ListForm:
+                    if word.startswith("http://t.co"):
+                        tweetURL_BoolList.append(True)
+                    else:
+                        tweetURL_BoolList.append(False)
+                    
+                    tweetSearchTerm_BoolList.append(False)
+
                 #advanced search handlers
                 #handles user input of retweet_threshold
                 if tweet_data.retweet_count < retweet_threshold_number:
@@ -115,6 +128,9 @@ class HomeView(View):
                 'Replied': tweet_data.in_reply_to_status_id_str,
                 'Tweet Polarity' : round(TextBlob(tweet).sentiment.polarity, 2),
                 'Tweet Subjectivity' : round(TextBlob(tweet).sentiment.subjectivity, 2),
+                'ListLength' : len(tweet_in_ListForm),
+                'URLBoolArr' : tweetURL_BoolList,
+                'tweetInListForm' : tweet_in_ListForm,
                 }
                 tweet_data_list.append(tweet_dict)
 
