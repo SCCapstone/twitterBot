@@ -11,6 +11,7 @@ from bokeh.layouts import column
 from bokeh.plotting import *
 from bokeh.embed import components
 from bokeh.resources import INLINE
+from bokeh.models import TapTool, OpenURL
 from textblob import TextBlob
 
 from math import pi
@@ -141,8 +142,9 @@ class HomeView(View):
 
             #dictionary of key: tweet to value: sentiment polarity
             sentiment_dict = {}
-
+            tweets_urls = []
             for tweet_data in tweet_data_list:
+                tweets_urls.append(tweet_data['tweetURL'])
                 tweet_TB = TextBlob(tweet_data['Tweet Text'])
                 sentiment_dict[tweet_data['Tweet Text']] = tweet_TB.sentiment.polarity
 
@@ -160,12 +162,17 @@ class HomeView(View):
 
             x_coord = []
             y_coord = []
-
             xs = list(range(0,len(polar)))
             #list of zeros to use as neg/pos separator
             zeros = [0] * len(polar)
             #list of halves
             halves = [0.5] * len(polar)
+
+            source1 = ColumnDataSource(data=dict(
+                    urls = tweets_urls,
+                    xs = xs,
+                    polar = sorted(polar)
+                ))
 
             #plot as multi line graph
             plot1 = figure(
@@ -175,8 +182,17 @@ class HomeView(View):
                 plot_width=400,
                 plot_height=400,
                 sizing_mode='scale_width',
-                tools='hover, pan'
+                tools='tap, pan, zoom_in, hover'
                 )
+            taptool = plot1.select(type=TapTool)
+            taptool.callback = OpenURL(url="@urls")
+
+            source2 = ColumnDataSource(data=dict(
+                    urls = tweets_urls,
+                    xs = xs,
+                    subj = sorted(subj)
+                ))
+
             plot2 = figure(
                 title='Subjectivity of Tweets',
                 x_axis_label='Tweets',
@@ -184,9 +200,11 @@ class HomeView(View):
                 plot_width=400,
                 plot_height=400,
                 sizing_mode='scale_width',
-                tools='hover, pan'
+                tools='tap, pan, zoom_in, hover'
                 )
-            x = { 'Positive': pos, 'Negative': neg, 'Neutral': neutral }
+            taptool2 = plot2.select(type=TapTool)
+            taptool2.callback = OpenURL(url="@urls")
+            x = { 'Positive': pos, 'Negative': neg, 'Neutral': neutral}
 
             data = pd.Series(x).reset_index(name='value').rename(columns={'index':'polarity'})
             data['angle'] = data['value']/data['value'].sum() * 2*pi
@@ -209,16 +227,14 @@ class HomeView(View):
             #plot1.line(xs,halves,line_width=4, color="blue") # halves line
             #plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             # plot1.line(xs,zeros,line_width=4, color="red") # zeros line
-            plot1.vbar(x=xs,top=sorted(polar),width=0.5, color="#00acee") # polar line
-            plot2.vbar(x=xs,top=sorted(subj),width=0.5, color="#00acee") # subj line
-
+            plot1.vbar(x='xs',top='polar',width=0.5, color="#00acee", source=source1) # polar line
+            plot2.vbar(x='xs',top='subj',width=0.5, color="#00acee", source=source2) # subj line
             # plot1.line(xs,halves,line_width=4, color="blue") # halves line
             # plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             plot1.toolbar.active_drag = None
             plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
             plot2.toolbar.active_drag = None
             plot2.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
-
             #assign graphs to a column structure
             col = column([plot1])
             col.sizing_mode = 'scale_width'
