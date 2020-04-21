@@ -44,7 +44,23 @@
       <!-- put button here -->
       <form method="post">
         {% csrf_token %}
-        <button type="button" class="btn btn-info"  style="background-color: #00acee" type="submit" onclick="delete_cookies()">Delete Cookies</button>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#delModal" style="background-color: #00acee">Delete Cookies</button>
+        <div class="modal fade" id="delModal" role="dialog">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Delete Cookies</h4>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete cookies?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal" onclick="delete_cookies()">Delete Cookies.</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal">No thanks.</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -90,13 +106,13 @@
     <!-- class was content-->
     <div class="col-sm-5">
       {% if searchBool == True %}
-      
+
       <pre id="trendText"><u><b>{{ text }}</b></u></pre>
 
       <div id="left">
         {% for tweet_data in tweet_data_list %}
         <div class="panel panel-info">
-          
+
           <div class="panel-heading">
             {% for key, value in tweet_data.items %}
               {% if key == 'User Name' %}
@@ -116,10 +132,10 @@
                 {{ value }}
               {% endif %}
             {% endfor %}
-            
+
             <br>
 
-            <!-- working on this to bold text 
+            <!-- working on this to bold text
             {% for key, value in tweet_data.items %}
               {% if key == 'tweetInListForm' %}
                 {% for word in value %}
@@ -179,7 +195,7 @@
                 <i>{{ value }} </i>
               {% endif %}
             {% endfor %}
-            
+
           </div>
         </div>
         {% endfor %}
