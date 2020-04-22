@@ -247,6 +247,9 @@ class HomeView(View):
             script2, div2 = components(col2)
             script3, div3 = components(col3)
 
+            if len(tweet_data_list) == 0:
+                search_bool = False
+
             #containing items to be returned to html page
             context = {
                 'title': 'Home',
@@ -254,6 +257,7 @@ class HomeView(View):
                 'text': search_text,
                 'searchBool' : search_bool,
                 'tweet_data_list': tweet_data_list,
+                'tweetListLen' : len(tweet_data_list),
                 'sentiments' : sentiment_dict.values(),
                 'resources': INLINE.render(),
                 'script1': script1,
@@ -267,21 +271,16 @@ class HomeView(View):
             # returning response and setting cookie
             response = render(request, 'home.html', context)
             response.set_cookie('searches', history_cookie)
-            # print(history)
             return response
 
         #if the form is not valid (aka: empty search)
         else:
-            #form = SearchForm()
             context = {
                 'title': 'Home',
                 'searchBool': search_bool,
                 'form': form,
             }
             response = render(request, 'home.html', context)
-            # response.set_cookie('test', 'success')
-            # print(request.COOKIES.get('test'))
-            # print("testing")
             return response
             
 

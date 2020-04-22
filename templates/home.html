@@ -135,100 +135,99 @@
     <!-- class was content-->
     <div class="col-sm-5">
       {% if searchBool == True %}
+          <pre id="trendText"><u><b>{{ text }}</b></u></pre>
 
-      <pre id="trendText"><u><b>{{ text }}</b></u></pre>
+          <div id="left">
+            {% for tweet_data in tweet_data_list %}
+            <div class="panel panel-info">
 
-      <div id="left">
-        {% for tweet_data in tweet_data_list %}
-        <div class="panel panel-info">
-
-          <div class="panel-heading">
-            {% for key, value in tweet_data.items %}
-              {% if key == 'User Name' %}
-                <b>{{ value }} </b>
-              {% endif %}
-            {% endfor %}
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Screen Name' %}
-                <a href="https://twitter.com/{{value}}" target="_blank"><i>@{{ value }}</i></a>
-              {% endif %}
-            {% endfor %}
-          </div>
-
-          <div class="panel-body">
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Tweet Text' %}
-                {{ value }}
-              {% endif %}
-            {% endfor %}
-
-            <br>
-
-            <!-- working on this to bold text
-            {% for key, value in tweet_data.items %}
-              {% if key == 'tweetInListForm' %}
-                {% for word in value %}
-                  {% if word == text%}
-                    <b>{{ word }}</b>
-                  {% else %}
-                    {{ word }}
+              <div class="panel-heading">
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'User Name' %}
+                    <b>{{ value }} </b>
                   {% endif %}
                 {% endfor %}
-              {% endif %}
-            {% endfor %}<br><br>-->
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Screen Name' %}
+                    <a href="https://twitter.com/{{value}}" target="_blank"><i>@{{ value }}</i></a>
+                  {% endif %}
+                {% endfor %}
+              </div>
 
-            {% for key, value in tweet_data.items %}
-              {% if key == 'tweetURL' %}
-                <a href="{{ value }}" target="_blank">View tweet on Twitter here.</a>
-              {% endif %}
+              <div class="panel-body">
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Tweet Text' %}
+                    {{ value }}
+                  {% endif %}
+                {% endfor %}
+
+                <br>
+
+                <!-- working on this to bold text
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'tweetInListForm' %}
+                    {% for word in value %}
+                      {% if word == text%}
+                        <b>{{ word }}</b>
+                      {% else %}
+                        {{ word }}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}<br><br>-->
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'tweetURL' %}
+                    <a href="{{ value }}" target="_blank">View tweet on Twitter here.</a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+
+              <div class="panel-footer">
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Retweet Count' %}
+                    <b>{{ value }} </b>Retweets
+                  {% endif %}
+                {% endfor %}
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Favorite Count' %}
+                    <b>{{ value }} </b>Likes
+                  {% endif %}
+                {% endfor %}
+
+                <br>
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Tweet Polarity' %}
+                    {% if value > 0 %}
+                      <b style="color: green">{{ value }} </b>Polarity
+                    {% elif value < 0 %}
+                      <b style="color: firebrick">{{ value }} </b>Polarity
+                    {% else %}
+                      <b>{{ value }} </b>Polarity
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Tweet Subjectivity' %}
+                    <b>{{ value }} </b>Subjectivity
+                  {% endif %}
+                {% endfor %}
+
+                <br>
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Tweet Created At' %}
+                    <i>{{ value }} </i>
+                  {% endif %}
+                {% endfor %}
+
+              </div>
+            </div>
             {% endfor %}
           </div>
-
-          <div class="panel-footer">
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Retweet Count' %}
-                <b>{{ value }} </b>Retweets
-              {% endif %}
-            {% endfor %}
-
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Favorite Count' %}
-                <b>{{ value }} </b>Likes
-              {% endif %}
-            {% endfor %}
-
-            <br>
-
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Tweet Polarity' %}
-                {% if value > 0 %}
-                  <b style="color: green">{{ value }} </b>Polarity
-                {% elif value < 0 %}
-                  <b style="color: firebrick">{{ value }} </b>Polarity
-                {% else %}
-                  <b>{{ value }} </b>Polarity
-                {% endif %}
-              {% endif %}
-            {% endfor %}
-
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Tweet Subjectivity' %}
-                <b>{{ value }} </b>Subjectivity
-              {% endif %}
-            {% endfor %}
-
-            <br>
-
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Tweet Created At' %}
-                <i>{{ value }} </i>
-              {% endif %}
-            {% endfor %}
-
-          </div>
-        </div>
-        {% endfor %}
-      </div>
       {% endif %}
     </div>
 
