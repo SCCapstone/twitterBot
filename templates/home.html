@@ -75,9 +75,10 @@
 
       <form method="GET" style="margin: 0; text-align: center;">
         {% csrf_token %}
-        <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
-        {% if searchBool == True %}
-          {{ form.search.errors }}
+        {% if form.search.errors %}
+          <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control is-invalid mr-sm-0">
+        {% else %}
+          <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
         {% endif %}
         <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold (must be positive)" class="form-control mr-sm-0">
         {{ form.retweet_threshold.errors }}
