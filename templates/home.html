@@ -11,6 +11,13 @@
     document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
     location.reload(true);
   }
+  function testPositive() {
+    var value = document.getElementById("left");
+    var value2 = document.getElementById("test1").innerHTML;
+    document.getElementById("test1").innerHTML = "";
+    value.innerHTML = value2;
+    console.log(value);
+  }
 </script>
   <br>
 
@@ -353,17 +360,17 @@
               {% endfor %}
             </div>
           {% endif %}
-          <button type="button" class="btn btn-danger" onclick="negativeFunction();" style="margin-left:5em; background-color: firebrick">Negative</button>
+          <button type="button" class="btn btn-danger" onclick="testPositive();" style="margin-left:5em; background-color: firebrick">Negative</button>
           <script>
             function negativeFunction() {
               alert("Negative")
-              {% negative = true %}
+              {% with negative="1" %}
+              {% endwith %}
             };
           </script>
-          {% if negative == True %}
-            <pre id="trendText"><u><b>{{ text }}</b></u></pre>
+            <!-- <pre id="trendText"><u><b>{{ text }}</b></u></pre> -->
 
-            <div id="left">
+            <div id="test1">
               {% for tweet_data in neg_tweet_data_list %}
               <div class="panel panel-info">
 
@@ -449,8 +456,7 @@
               </div>
               {% endfor %}
             </div>
-          {% endif %}
-          <button type="button" class="btn btn-secondary" onclick="neutralFunction();" style="margin-left:5em; background-color: #236D91">Neutral</button>
+          <button type="button" class="btn btn-secondary" onclick="testPositive();" style="margin-left:5em; background-color: #236D91">Neutral</button>
           <script>
             function neutralFunction() {
               alert("Neutral")
