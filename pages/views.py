@@ -74,6 +74,9 @@ class HomeView(View):
 
             #list used to store tweet data
             tweet_data_list = []
+            pos_tweet_data_list = []
+            neg_tweet_data_list = []
+            neu_tweet_data_list = []
 
             #lists used to store graph coordinates for graph
             polar = []
@@ -124,12 +127,24 @@ class HomeView(View):
                 'tweetInListForm' : tweet_in_ListForm,
                 'tweetURL' : tweetURL,
                 }
+
+                if round(TextBlob(tweet).sentiment.polarity, 2) > 0:
+                    pos_tweet_data_list.append(tweet_dict)
+                elif round(TextBlob(tweet).sentiment.polarity, 2) < 0:
+                    neg_tweet_data_list.append(tweet_dict)
+                else:
+                    neu_tweet_data_list.append(tweet_dict)
+
                 tweet_data_list.append(tweet_dict)
 
             # Sort tweet_data_list by polarity in ascending order
             def myFunc(e):
                 return e['Tweet Polarity']
             tweet_data_list.sort(key=myFunc)
+            pos_tweet_data_list.sort(key=myFunc)
+            neg_tweet_data_list.sort(key=myFunc)
+            neu_tweet_data_list.sort(key=myFunc)
+            
 
             #use TextBlob to analyze sentiment polarity and subjectivity
             #append the results to the coordinates list
@@ -257,6 +272,9 @@ class HomeView(View):
                 'text': search_text,
                 'searchBool' : search_bool,
                 'tweet_data_list': tweet_data_list,
+                'pos_tweet_data_list': pos_tweet_data_list,
+                'neg_tweet_data_list': neg_tweet_data_list,
+                'neu_tweet_data_list': neu_tweet_data_list,
                 'tweetListLen' : len(tweet_data_list),
                 'sentiments' : sentiment_dict.values(),
                 'resources': INLINE.render(),
