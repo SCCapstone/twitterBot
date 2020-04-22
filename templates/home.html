@@ -259,11 +259,12 @@
           <script>
             function positiveFunction() {
               alert("Positive")
-              {% with positive=true %}
+              {% with positive=True %}
               {% endwith %}
+              location.reload(true);
             };
           </script>
-          {% if positive == True %}
+          <{% if positive == True %}
             <pre id="trendText"><u><b>{{ text }}</b></u></pre>
 
             <div id="left">
@@ -357,7 +358,9 @@
           <script>
             function negativeFunction() {
               alert("Negative")
-              {% negative = true %}
+              {% with negative=True %}
+              {% endwith %}
+              location.reload(true);
             };
           </script>
           {% if negative == True %}
@@ -454,8 +457,9 @@
           <script>
             function neutralFunction() {
               alert("Neutral")
-              {% with neutral=true %}
+              {% with neutral=True %}
               {% endwith %}
+              location.reload(true);
             };
           </script>
           {% if neutral == True %}
