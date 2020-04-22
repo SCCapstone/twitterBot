@@ -254,19 +254,28 @@
 
   <br>
 
-  <!-- History Bar at bottom -->
   {% if searchBool == True %}
   <div class="row">
     <div class="col-sm-1">
     </div>
 
-    <div class="col-sm-10">
-      <!--print history -->
-      <!--<pre id="history"><i><b>History:</b></i>   {% for search in history %}<a href="" type="submit"><b>{{ search }}</b></a> • {% endfor %}-->
+    <div class="col-sm-5">
+      <pre id="history">
+        <div style="text-align: center;">
+          <b><u><p style="margin-bottom: 0px">Sort Tweet Display By:</p></u></b>
+          <br>
+          <button type="button" class="btn btn-success">Positive</button>
+          <button type="button" class="btn btn-danger" style="margin-left:5em">Negative</button>
+          <button type="button" class="btn btn-secondary" style="margin-left:5em">Neutral</button>
+        </div>
+      </pre>
+    </div>
 
+    <!-- History Bar -->
+    <div class="col-sm-5" style="margin-left: 0px">
       <form method="GET"  style="margin: 0; text-align: center;">
         {% csrf_token %}
-        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}</form>
+        <pre id="history" style="padding-bottom: 15px; padding-top: 14px"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}</form>
         </pre>
     </div>
 
