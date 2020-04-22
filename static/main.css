@@ -85,3 +85,8 @@ ol.carousel-indicators li.active {
   overflow: auto;
   white-space: nowrap;
 }
+
+#info1 {
+  background: white;
+  border: white;
+}

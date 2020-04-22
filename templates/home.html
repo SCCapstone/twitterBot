@@ -76,7 +76,7 @@
       <form method="GET" style="margin: 0; text-align: center;">
         {% csrf_token %}
         <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
-        {% if searchBool == False %}
+        {% if searchBool == True %}
           {{ form.search.errors }}
         {% endif %}
         <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold (must be positive)" class="form-control mr-sm-0">
@@ -85,9 +85,37 @@
         {{ form.favorite_threshold.errors }}
         <input id="date_threshold" type="date" name="date_threshold" placeholder="mm/dd/yyyy hh:mm am (only up to 7 days in the past)" class="form-control mr-sm-0">
         {{ form.date_threshold.errors }}
-        <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">Search</button>
+        <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">Search</button><br>  
       </form>
+
+      <div style="display: block; text-align: center;">
+        <button id="info1" data-toggle="modal" data-target="#theNewModal"><b>&#9432;</b></button>
+          <!-- Search Information Modal -->
+          <div class="modal fade" id="theNewModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Search Information</h4>
+                </div>
+                <div class="modal-body">
+                  <h5> Welcome to Tweetbot! </h5>
+                  <p> This is a tool for trend tracking on what people are currently tweeting! This app will show you the polarity (If what people are saying is positive or negative), giving you a better understanding of how the trend is being viewed and talked about by Twitter users.</p>
+                  <ul style="text-align: center; list-style-position: inside;">
+                    <li>A Search Term is required for a serach to take place!</li>
+                    <li>Retweet Threshold: Will only display tweets with a number of retweets greater than the number entered!</li>
+                    <li>Favorite Threshold: Will only display tweets with a number of favorites greater than the number entered!</li>
+                    <li>Date: Allows you to search based on day up to one week in the past!</li>
+                  </ul>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
     </div>
+    
 
     <div style="padding-right: 0px"; class="col-sm-2">
     </div>
