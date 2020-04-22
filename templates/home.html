@@ -11,11 +11,13 @@
     document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
     location.reload(true);
   }
+  function saveLists() {
+    localStorage.setItem("neg", document.getElementById("test1").innerHTML)
+    document.getElementById("test1").innerHTML = "";
+  }
   function testPositive() {
     var value = document.getElementById("left");
-    var value2 = document.getElementById("test1").innerHTML;
-    document.getElementById("test1").innerHTML = "";
-    value.innerHTML = value2;
+    value.innerHTML = localStorage.getItem("neg");
     console.log(value);
   }
 </script>
@@ -560,7 +562,7 @@
         </div>
       </pre>
     </div>
-
+    <script>saveLists();</script>
     <!-- History Bar -->
     <div class="col-sm-5" style="margin-left: 0px">
       <form method="GET"  style="margin: 0; text-align: center;">
