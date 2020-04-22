@@ -122,6 +122,8 @@
                     {% for word in value %}
                       {% if word|lower == text|lower or text|lower in word|lower %}
                         <b>{{ word }}</b>
+                      {% elif "https://t.co" in word|lower %}
+                        <a href="{{ word }}" target="_blank">{{ word }}</a>
                       {% else %}
                         {{ word }}
                       {% endif %}
