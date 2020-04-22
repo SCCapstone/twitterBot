@@ -16,3 +16,4 @@ whitenoise = "*"
 pandas = "*"
 
 [requires]
+python_version = "3.6.8"
