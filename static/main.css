@@ -17,6 +17,14 @@ h1, h2 a {
     margin-left: -15px;
 }
 
+.centeredImg {
+  border:3px solid #D6EDF8;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 65%;
+}
+
 ol.carousel-indicators {
   position: absolute;
   bottom: 0;
@@ -84,4 +92,10 @@ ol.carousel-indicators li.active {
 #history {
   overflow: auto;
   white-space: nowrap;
+}
+
+#info1 {
+  background: white;
+  border: white;
+  color: #00acee;
 }

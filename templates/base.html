@@ -4,7 +4,7 @@
 <html lang="en">
 <header>
 	<meta charset="utf-8">
-	
+
 	<!--bootstrap-->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -45,12 +45,36 @@
 
 		<!-- Nav bar logo -->
 		<li class="nav-item mr-auto">
-			<a class="navbar-brand ml-sm-1" href="#">
+			<a class="navbar-brand ml-sm-1" href="{% url 'home' %}">
 				<!--img src="https://i.ibb.co/ZKD0T1d/logo.png" height="33"alt=""-->
 				<img src="https://i.ibb.co/7RPLkSc/twit-Bot-Logo.png" height="33" alt="">
 			</a>
 		</li>
 
+		{% if searchBool == True %}
+			<div style="display: block; text-align: center; margin-right: 33em">
+	          <form method="post">
+	            {% csrf_token %}
+	            <button type="button" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" data-toggle="modal" data-target="#delModal">Delete Cookies</button>
+	            <div class="modal fade" id="delModal" role="dialog">
+	              <div class="modal-dialog modal-sm">
+	                <div class="modal-content">
+	                  <div class="modal-header">
+	                    <h4 class="modal-title">Delete Cookies</h4>
+	                  </div>
+	                  <div class="modal-body">
+	                    <p>Are you sure you want to delete cookies?</p>
+	                  </div>
+	                  <div class="modal-footer">
+	                    <button type="button" class="btn btn-info" data-dismiss="modal" onclick="delete_cookies()">Delete Cookies.</button>
+	                    <button type="button" class="btn btn-info" data-dismiss="modal">No thanks.</button>
+	                  </div>
+	                </div>
+	              </div>
+	            </div>
+	          </form>
+	        </div>
+	    {% endif %}
 		<!-- active nav bar items -->
 		<li class="nav-item {{ home }}"><a class="nav-link {{ status0 }}" href="{% url 'home' %}" style="color: #00acee">Home</a><li>
 		<li class="nav-item {{ about }}"><a class="nav-link {{ status1 }}" href="{% url 'about' %}" style="color: #00acee">About</a></li>
@@ -71,7 +95,7 @@
 
 	<!-- Content Block Base -->
 	{% block content %}{% endblock content %}
-				
+
 	  	</div>
 		</div>
 	</main>

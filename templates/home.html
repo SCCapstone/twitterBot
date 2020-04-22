@@ -12,42 +12,14 @@
     location.reload(true);
   }
 </script>
-
   <br>
-  <div class="row">
 
-    <div class="col-sm-10">
+  {% if searchBool == True %}
+    <!-- Delete Cookies Button -->
+    <div style="text-align: center">
+      
     </div>
-
-    <div class="col-sm-2">
-      <!-- Trigger the modal with a button -->
-      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="background-color: #00acee">Cookie Warning</button>
-      <!-- Modal -->
-      <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog modal-sm">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Cookie Warning</h4>
-            </div>
-            <div class="modal-body">
-              <p>This website uses cookies to track search history for our users.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-info" data-dismiss="modal">Got it!</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <br><br>
-
-      <!-- put button here -->
-      <form method="post">
-        {% csrf_token %}
-        <button type="button" class="btn btn-info"  style="background-color: #00acee" type="submit" onclick="delete_cookies()">Delete Cookies</button>
-      </form>
-    </div>
-  </div>
+  {% endif %}
 
   <div class="row">
     <div class="col-sm-2">
@@ -55,21 +27,58 @@
 
     <div class="col-sm-8">
       <!-- header temporary holder for logo-->
-      <h1 style="text-align: center; padding-top: 150px; color: #00acee; font-family: 'Courier New', Times, monospace;"> tweetBot. </h1>
+      {% if searchBool == False %}
+        <h1 style="text-align: center; padding-top: 150px; color: #00acee; font-family: 'Courier New', Times, monospace;"> tweetBot. </h1>
+      {% else %}
+        <h1 style="text-align: center; color: #00acee; font-family: 'Courier New', Times, monospace;">tweetBot.</h1>
+      {% endif %}
 
       <form method="GET" style="margin: 0; text-align: center;">
         {% csrf_token %}
-        <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
-        {{ form.search.errors }}
+        {% if form.search.errors %}
+          <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control is-invalid mr-sm-0">
+        {% else %}
+          <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
+        {% endif %}
         <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold (must be positive)" class="form-control mr-sm-0">
         {{ form.retweet_threshold.errors }}
         <input id="favorite_threshold" type="text" name="favorite_threshold" placeholder="Favorite Threshold (must be positive)" class="form-control mr-sm-0">
         {{ form.favorite_threshold.errors }}
         <input id="date_threshold" type="date" name="date_threshold" placeholder="mm/dd/yyyy hh:mm am (only up to 7 days in the past)" class="form-control mr-sm-0">
         {{ form.date_threshold.errors }}
-        <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px">Search</button>
+        <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px; margin-bottom: 0px">Search</button>
       </form>
+
+      <div style="display: block; text-align: center;">
+        <button id="info1" data-toggle="modal" data-target="#theNewModal"><b>&#9432;</b></button>
+          <!-- Search Information Modal -->
+          <div class="modal fade" id="theNewModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">TweetBot Information</h4>
+                </div>
+                <div class="modal-body">
+                  <h5> Welcome to Tweetbot! </h5>
+                  <p><b>Warning: This website uses cookies to track search history for our users.</b></p>
+                  <p> This is a tool for trend tracking on what people are currently tweeting! This app will show you the polarity (If what people are saying is positive or negative), giving you a better understanding of how the trend is being viewed and talked about by Twitter users.</p>
+                  <ul style="text-align: center; list-style-position: inside;">
+                    <li>A Search Term is required for a serach to take place!</li>
+                    <li>Search results are sorted by polarity in ascending order (Lowest to Highest)!</li>
+                    <li>Retweet Threshold: Will only display tweets with a number of retweets greater than the number entered!</li>
+                    <li>Favorite Threshold: Will only display tweets with a number of favorites greater than the number entered!</li>
+                    <li>Date: Allows you to search based on day up to one week in the past!</li>
+                  </ul>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
     </div>
+    
 
     <div style="padding-right: 0px"; class="col-sm-2">
     </div>
@@ -88,79 +97,94 @@
     <!-- class was content-->
     <div class="col-sm-5">
       {% if searchBool == True %}
-      
-      <pre id="trendText"><u><b>{{ text }}</b></u></pre>
+          <pre id="trendText"><u><b>{{ text }}</b></u></pre>
 
-      <div id="left">
-        {% for tweet_data in tweet_data_list %}
-        <div class="panel panel-info">
-          
-          <div class="panel-heading">
-            {% for key, value in tweet_data.items %}
-              {% if key == 'User Name' %}
-                <b>{{ value }} </b>
-              {% endif %}
-            {% endfor %}
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Screen Name' %}
-                <i>@{{ value }}</i>
-              {% endif %}
+          <div id="left">
+            {% for tweet_data in tweet_data_list %}
+            <div class="panel panel-info">
+
+              <div class="panel-heading">
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'User Name' %}
+                    <b>{{ value }} </b>
+                  {% endif %}
+                {% endfor %}
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Screen Name' %}
+                    <a href="https://twitter.com/{{value}}" target="_blank"><i>@{{ value }}</i></a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+
+              <div class="panel-body">
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'tweetInListForm' %}
+                    {% for word in value %}
+                      {% if word|lower == text|lower or text|lower in word|lower %}
+                        <b>{{ word }}</b>
+                      {% elif "https://t.co" in word|lower %}
+                        <a href="{{ word }}" target="_blank">{{ word }}</a>
+                      {% else %}
+                        {{ word }}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+
+                <br>
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'tweetURL' %}
+                    <a href="{{ value }}" target="_blank">View tweet on Twitter here.</a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+
+              <div class="panel-footer">
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Retweet Count' %}
+                    <b>{{ value }} </b>Retweets
+                  {% endif %}
+                {% endfor %}
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Favorite Count' %}
+                    <b>{{ value }} </b>Likes
+                  {% endif %}
+                {% endfor %}
+
+                <br>
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Tweet Polarity' %}
+                    {% if value > 0 %}
+                      <b style="color: green">{{ value }} </b>Polarity
+                    {% elif value < 0 %}
+                      <b style="color: firebrick">{{ value }} </b>Polarity
+                    {% else %}
+                      <b>{{ value }} </b>Polarity
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Tweet Subjectivity' %}
+                    <b>{{ value }} </b>Subjectivity
+                  {% endif %}
+                {% endfor %}
+
+                <br>
+
+                {% for key, value in tweet_data.items %}
+                  {% if key == 'Tweet Created At' %}
+                    <i>{{ value }} </i>
+                  {% endif %}
+                {% endfor %}
+
+              </div>
+            </div>
             {% endfor %}
           </div>
-
-          <div class="panel-body">
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Tweet Text' %}
-                {{ value }}
-              {% endif %}
-            {% endfor %}
-          </div>
-
-          <div class="panel-footer">
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Retweet Count' %}
-                <b>{{ value }} </b>Retweets
-              {% endif %}
-            {% endfor %}
-
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Favorite Count' %}
-                <b>{{ value }} </b>Likes
-              {% endif %}
-            {% endfor %}
-
-            <br>
-
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Tweet Polarity' %}
-                {% if value > 0 %}
-                  <b style="color: green">{{ value }} </b>Polarity
-                {% elif value < 0 %}
-                  <b style="color: firebrick">{{ value }} </b>Polarity
-                {% else %}
-                  <b>{{ value }} </b>Polarity
-                {% endif %}
-              {% endif %}
-            {% endfor %}
-
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Tweet Subjectivity' %}
-                <b>{{ value }} </b>Subjectivity
-              {% endif %}
-            {% endfor %}
-
-            <br>
-
-            {% for key, value in tweet_data.items %}
-              {% if key == 'Tweet Created At' %}
-                <i>{{ value }} </i>
-              {% endif %}
-            {% endfor %}
-            
-          </div>
-        </div>
-        {% endfor %}
-      </div>
       {% endif %}
     </div>
 
@@ -215,19 +239,40 @@
 
   <br>
 
-  <!-- History Bar at bottom -->
   {% if searchBool == True %}
+  {% with positive=False %}
+  {% endwith %}
+  {% with negative=False %}
+  {% endwith %}
+  {% with neutral=False %}
+  {% endwith %}
   <div class="row">
     <div class="col-sm-1">
     </div>
 
-    <div class="col-sm-10">
-      <!--print history -->
-      <!--<pre id="history"><i><b>History:</b></i>   {% for search in history %}<a href="" type="submit"><b>{{ search }}</b></a> • {% endfor %}-->
+    <div class="col-sm-5">
+      <pre id="history">
+        <div style="text-align: center;">
+          <b><u><p style="margin-bottom: 0px">Sort Tweet Display By:</p></u></b>
+          <br>
+          <button type="button" class="btn btn-success" onclick="positiveFunction();" style="background-color: green">Positive</button>
+          <script>
+            function positiveFunction() {
+              {% with positive=True %}
+              {% endwith %}
+            };
+          </script>
+          <button type="button" class="btn btn-danger" style="margin-left:5em; background-color: firebrick">Negative</button>
+          <button type="button" class="btn btn-secondary" style="margin-left:5em; background-color: #236D91">Neutral</button>
+        </div>
+      </pre>
+    </div>
 
+    <!-- History Bar -->
+    <div class="col-sm-5" style="margin-left: 0px">
       <form method="GET"  style="margin: 0; text-align: center;">
         {% csrf_token %}
-        <pre id="history"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}</form>
+        <pre id="history" style="padding-bottom: 15px; padding-top: 14px"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}</form>
         </pre>
     </div>
 

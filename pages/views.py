@@ -11,6 +11,7 @@ from bokeh.layouts import column
 from bokeh.plotting import *
 from bokeh.embed import components
 from bokeh.resources import INLINE
+from bokeh.models import TapTool, OpenURL
 from textblob import TextBlob
 
 from math import pi
@@ -46,6 +47,7 @@ class HomeView(View):
 
             #User Input
             search_text = form.cleaned_data['search']
+            search_text_list = search_text.split()
 
             #Advanced Search Input Here
             #declare variables because not all fields of the form are required
@@ -90,6 +92,9 @@ class HomeView(View):
                     tweet = tweet_data.full_text
                     favorite_count = tweet_data.favorite_count
 
+                tweet_in_ListForm = tweet.split()
+                tweetURL = f"https://twitter.com/{tweet_data.user.screen_name}/status/{tweet_data.id}"
+
                 #advanced search handlers
                 #handles user input of retweet_threshold
                 if tweet_data.retweet_count < retweet_threshold_number:
@@ -115,8 +120,16 @@ class HomeView(View):
                 'Replied': tweet_data.in_reply_to_status_id_str,
                 'Tweet Polarity' : round(TextBlob(tweet).sentiment.polarity, 2),
                 'Tweet Subjectivity' : round(TextBlob(tweet).sentiment.subjectivity, 2),
+                'ListLength' : len(tweet_in_ListForm),
+                'tweetInListForm' : tweet_in_ListForm,
+                'tweetURL' : tweetURL,
                 }
                 tweet_data_list.append(tweet_dict)
+
+            # Sort tweet_data_list by polarity in ascending order
+            def myFunc(e):
+                return e['Tweet Polarity']
+            tweet_data_list.sort(key=myFunc)
 
             #use TextBlob to analyze sentiment polarity and subjectivity
             #append the results to the coordinates list
@@ -129,8 +142,9 @@ class HomeView(View):
 
             #dictionary of key: tweet to value: sentiment polarity
             sentiment_dict = {}
-
+            tweets_urls = []
             for tweet_data in tweet_data_list:
+                tweets_urls.append(tweet_data['tweetURL'])
                 tweet_TB = TextBlob(tweet_data['Tweet Text'])
                 sentiment_dict[tweet_data['Tweet Text']] = tweet_TB.sentiment.polarity
 
@@ -148,12 +162,17 @@ class HomeView(View):
 
             x_coord = []
             y_coord = []
-
             xs = list(range(0,len(polar)))
             #list of zeros to use as neg/pos separator
             zeros = [0] * len(polar)
             #list of halves
             halves = [0.5] * len(polar)
+
+            source1 = ColumnDataSource(data=dict(
+                    urls = tweets_urls,
+                    xs = xs,
+                    polar = sorted(polar)
+                ))
 
             #plot as multi line graph
             plot1 = figure(
@@ -163,8 +182,17 @@ class HomeView(View):
                 plot_width=400,
                 plot_height=400,
                 sizing_mode='scale_width',
-                tools='hover, pan'
+                tools='tap, pan, zoom_in, hover'
                 )
+            taptool = plot1.select(type=TapTool)
+            taptool.callback = OpenURL(url="@urls")
+
+            source2 = ColumnDataSource(data=dict(
+                    urls = tweets_urls,
+                    xs = xs,
+                    subj = sorted(subj)
+                ))
+
             plot2 = figure(
                 title='Subjectivity of Tweets',
                 x_axis_label='Tweets',
@@ -172,9 +200,11 @@ class HomeView(View):
                 plot_width=400,
                 plot_height=400,
                 sizing_mode='scale_width',
-                tools='hover, pan'
+                tools='tap, pan, zoom_in, hover'
                 )
-            x = { 'Positive': pos, 'Negative': neg, 'Neutral': neutral }
+            taptool2 = plot2.select(type=TapTool)
+            taptool2.callback = OpenURL(url="@urls")
+            x = { 'Positive': pos, 'Negative': neg, 'Neutral': neutral}
 
             data = pd.Series(x).reset_index(name='value').rename(columns={'index':'polarity'})
             data['angle'] = data['value']/data['value'].sum() * 2*pi
@@ -197,16 +227,14 @@ class HomeView(View):
             #plot1.line(xs,halves,line_width=4, color="blue") # halves line
             #plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             # plot1.line(xs,zeros,line_width=4, color="red") # zeros line
-            plot1.vbar(x=xs,top=sorted(polar),width=0.5, color="#00acee") # polar line
-            plot2.vbar(x=xs,top=sorted(subj),width=0.5, color="#00acee") # subj line
-
+            plot1.vbar(x='xs',top='polar',width=0.5, color="#00acee", source=source1) # polar line
+            plot2.vbar(x='xs',top='subj',width=0.5, color="#00acee", source=source2) # subj line
             # plot1.line(xs,halves,line_width=4, color="blue") # halves line
             # plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             plot1.toolbar.active_drag = None
             plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
             plot2.toolbar.active_drag = None
             plot2.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
-
             #assign graphs to a column structure
             col = column([plot1])
             col.sizing_mode = 'scale_width'
@@ -219,6 +247,9 @@ class HomeView(View):
             script2, div2 = components(col2)
             script3, div3 = components(col3)
 
+            if len(tweet_data_list) == 0:
+                search_bool = False
+
             #containing items to be returned to html page
             context = {
                 'title': 'Home',
@@ -226,6 +257,7 @@ class HomeView(View):
                 'text': search_text,
                 'searchBool' : search_bool,
                 'tweet_data_list': tweet_data_list,
+                'tweetListLen' : len(tweet_data_list),
                 'sentiments' : sentiment_dict.values(),
                 'resources': INLINE.render(),
                 'script1': script1,
@@ -235,25 +267,21 @@ class HomeView(View):
                 'script3': script3,
                 'div3': div3,
                 'history': history,
+                
             }
             # returning response and setting cookie
             response = render(request, 'home.html', context)
             response.set_cookie('searches', history_cookie)
-            # print(history)
             return response
 
         #if the form is not valid (aka: empty search)
         else:
-            #form = SearchForm()
             context = {
                 'title': 'Home',
                 'searchBool': search_bool,
                 'form': form,
             }
             response = render(request, 'home.html', context)
-            # response.set_cookie('test', 'success')
-            # print(request.COOKIES.get('test'))
-            # print("testing")
             return response
             
 
