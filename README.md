@@ -13,6 +13,13 @@ We are building a twitter data-scraping software that will fetch tweets based on
   9. npm 3.5.2
 
 ### Running (locally):
+  You must install pipenv:
+  pipenv install
+  
+  Then in the twitterBot directory:
+  pipenv shell
+  
+  To begin running it locally:
   python manage.py runserver
 
 ### Deployment:
