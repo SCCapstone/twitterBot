@@ -54,6 +54,7 @@ class HomeView(View):
             retweet_threshold_number = 0
             favorite_threshold_number = 0
             date_threshold = None
+            tweet_number = 100
             #check if the content of the field is present
             if form.cleaned_data['retweet_threshold']:
                 retweet_threshold_number = form.cleaned_data['retweet_threshold']
@@ -61,6 +62,8 @@ class HomeView(View):
                 favorite_threshold_number = form.cleaned_data['favorite_threshold']
             if form.cleaned_data['date_threshold']:
                 date_threshold = form.cleaned_data['date_threshold']
+            if form.cleaned_data['tweet_number']:
+                tweet_number = form.cleaned_data['tweet_number']
 
             # pulling current history and adding latest search 
             history_cookie = str(request.COOKIES.get("searches")) + search_text + "+++++"

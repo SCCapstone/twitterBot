@@ -18,6 +18,7 @@ class SearchForm(forms.Form):
     retweet_threshold = forms.IntegerField(required = False)
     favorite_threshold = forms.IntegerField(required = False)
     date_threshold = forms.DateField (required = False)
+    tweet_number = forms.IntegerField(required = False)
 
     def clean_search(self):
         data = self.cleaned_data.get('search')

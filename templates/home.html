@@ -11,6 +11,9 @@
     document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
     location.reload(true);
   }
+  // so this creates the lists on the page and saves the html to local storage
+  // after saving, it immediately removes the innerhtml so the user can't see
+
   function saveLists() {
     localStorage.setItem("neg", document.getElementById("neg").innerHTML)
     document.getElementById("neg").innerHTML = "";
@@ -19,6 +22,8 @@
     localStorage.setItem("neu", document.getElementById("neu").innerHTML)
     document.getElementById("neu").innerHTML = "";
   }
+  // these functions, on button click, set the value of our tweet list to the local storage values we set earlier for the neg/pos/neu lists
+  // kinda hacky but the only way we could figure out live updates
   function filterNegative() {
     var value = document.getElementById("left");
     value.innerHTML = localStorage.getItem("neg");
@@ -34,6 +39,16 @@
     value.innerHTML = localStorage.getItem("neu");
     console.log(value);
   }
+  function loadDropdown() {
+    var dropdown=document.getElementById("tweet_number_dropdown")
+    for (var i=1;i<=100;i++) {
+      var newOption = document.createElement('<option>');
+      newOption.Text = i;
+      newOption.value = i;
+      dropdown.options.add(newOption);
+    }
+  }
+  window.onload=loadDropdown();
 </script>
   <br>
 
@@ -277,13 +292,16 @@
       <pre id="history">
         <div style="text-align: center;">
           <b><u><p style="margin-bottom: 0px">Sort Tweet Display By:</p></u></b>
+          <!-- buttons -->
           <br>
 
           <button type="button" class="btn btn-success" onclick="filterPositive();" style="background-color: green">Positive</button>
           <button type="button" class="btn btn-danger" onclick="filterNegative();" style="margin-left:5em; background-color: firebrick">Negative</button>
           <button type="button" class="btn btn-secondary" onclick="filterNeutral();" style="margin-left:5em; background-color: #236D91">Neutral</button>
             <!-- <pre id="trendText"><u><b>{{ text }}</b></u></pre> -->
-
+            <!-- ima keep it real with you chief, this code is gross -->
+            <!-- had to copy and paste the tweet list 3 times, one for each filter option -->
+            <!-- this is so that we can copy the inner html as seen on line 17 -->
             <div id="pos">
               {% for tweet_data in pos_tweet_data_list %}
               <div class="panel panel-info">
@@ -545,10 +563,12 @@
                 </div>
               </div>
               {% endfor %}
+              <!-- end of copy pasted lists -->
             </div>
         </div>
       </pre>
     </div>
+    <!-- runs saveLists to save them to local storage and delete their html from the page before the user can see :) -->
     <script>saveLists();</script>
     <!-- History Bar -->
     <div class="col-sm-5" style="margin-left: 0px">
