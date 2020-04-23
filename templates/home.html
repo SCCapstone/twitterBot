@@ -39,16 +39,6 @@
     value.innerHTML = localStorage.getItem("neu");
     console.log(value);
   }
-  function loadDropdown() {
-    var dropdown=document.getElementById("tweet_number_dropdown")
-    for (var i=1;i<=100;i++) {
-      var newOption = document.createElement('<option>');
-      newOption.Text = i;
-      newOption.value = i;
-      dropdown.options.add(newOption);
-    }
-  }
-  window.onload=loadDropdown();
 </script>
   <br>
 
@@ -78,9 +68,11 @@
         {% else %}
           <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
         {% endif %}
-        <input id="retweet_threshold" type="text" name="retweet_threshold" placeholder="Retweet Threshold (must be positive)" class="form-control mr-sm-0">
+        <input id="tweet_number" type="number" name="tweet_number" class="form-control mr-sm-0" placeholder="Number of tweets (1-100)" min="1" max="100">
+        {{ form.tweet_number.errors }}
+        <input id="retweet_threshold" type="number" name="retweet_threshold" placeholder="Retweet Threshold (must be positive)" class="form-control mr-sm-0" min="1">
         {{ form.retweet_threshold.errors }}
-        <input id="favorite_threshold" type="text" name="favorite_threshold" placeholder="Favorite Threshold (must be positive)" class="form-control mr-sm-0">
+        <input id="favorite_threshold" type="number" name="favorite_threshold" placeholder="Favorite Threshold (must be positive)" class="form-control mr-sm-0" min="1">
         {{ form.favorite_threshold.errors }}
         <input id="date_threshold" type="date" name="date_threshold" placeholder="mm/dd/yyyy hh:mm am (only up to 7 days in the past)" class="form-control mr-sm-0">
         {{ form.date_threshold.errors }}

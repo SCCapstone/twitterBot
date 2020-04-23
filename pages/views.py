@@ -32,6 +32,11 @@ class HomeView(View):
 
     def get(self, request):
 
+
+        #Tweepy Authentication
+        auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
+        auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
+        api = tweepy.API(auth)
         #for is the search form in forms.py
         response = HttpResponse("Cookie set")
         response.set_cookie('java-tutorial', 'javatpoint.com')
@@ -40,7 +45,18 @@ class HomeView(View):
         search_bool = False
         history = ""
 
-        if form.is_valid():
+        if api.rate_limit_status()['resources']['users']['/users/lookup']['remaining'] < 100:
+            rate_limit_error = True
+            context = {
+                'title': 'Home',
+                'searchBool': search_bool,
+                'form': form,
+                'rate_limit_error': rate_limit_error
+            }
+            response = render(request, 'home.html', context)
+            return response
+
+        elif form.is_valid():
 
             #search is valid
             search_bool = True
@@ -55,6 +71,7 @@ class HomeView(View):
             favorite_threshold_number = 0
             date_threshold = None
             tweet_number = 100
+
             #check if the content of the field is present
             if form.cleaned_data['retweet_threshold']:
                 retweet_threshold_number = form.cleaned_data['retweet_threshold']
@@ -86,7 +103,7 @@ class HomeView(View):
             subj= []
 
             # putting tweet_data into a dict
-            for tweet_data in tweepy.Cursor(api.search, q = search_text, until = date_threshold, tweet_mode = 'extended', lang = 'en').items(100):
+            for tweet_data in tweepy.Cursor(api.search, q = search_text, until = date_threshold, tweet_mode = 'extended', lang = 'en').items(tweet_number):
                 #if retweeted status exists in tweet_data a little workaround is needed
                 #to get the correct data from the tweet_data
                 tweet = ''
@@ -311,6 +328,8 @@ class HomeView(View):
             }
             response = render(request, 'home.html', context)
             return response
+
+
             
 
 class AboutView(View):

@@ -26,22 +26,6 @@ class SearchForm(forms.Form):
             raise forms.ValidationError('Enter a search term!')
         return data
 
-    def clean_retweet_threshold(self):
-        data = self.cleaned_data.get('retweet_threshold')
-        if data == None:
-            return data
-        if data < 0:
-            raise forms.ValidationError('Enter positive number for favorite threshold!')
-        return data
-
-    def clean_favorite_threshold(self):
-        data = self.cleaned_data.get('favorite_threshold')
-        if data == None:
-            return data
-        if data < 0:
-            raise forms.ValidationError('Enter positive number for favorite threshold!')
-        return data
-
     def clean_date_threshold(self):
         data = self.cleaned_data.get('date_threshold')
         if data == None:
