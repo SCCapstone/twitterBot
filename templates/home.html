@@ -278,28 +278,13 @@
         <div style="text-align: center;">
           <b><u><p style="margin-bottom: 0px">Sort Tweet Display By:</p></u></b>
           <br>
-<<<<<<< HEAD
-          <button type="button" class="btn btn-success" onclick="positiveFunction();" style="background-color: green">Positive</button>
-          <script>
-            function positiveFunction() {
-              alert("Positive")
-              {% with positive=True %}
-              {% endwith %}
-              location.reload(true);
-            };
-          </script>
-          {% if positive == True %}
-            <pre id="trendText"><u><b>{{ text }}</b></u></pre>
 
-            <div id="left">
-=======
           <button type="button" class="btn btn-success" onclick="filterPositive();" style="background-color: green">Positive</button>
           <button type="button" class="btn btn-danger" onclick="filterNegative();" style="margin-left:5em; background-color: firebrick">Negative</button>
           <button type="button" class="btn btn-secondary" onclick="filterNeutral();" style="margin-left:5em; background-color: #236D91">Neutral</button>
             <!-- <pre id="trendText"><u><b>{{ text }}</b></u></pre> -->
 
             <div id="pos">
->>>>>>> 9d42ac1b40c873d83019fc162e45bd294627d11b
               {% for tweet_data in pos_tweet_data_list %}
               <div class="panel panel-info">
 
@@ -385,20 +370,7 @@
               </div>
               {% endfor %}
             </div>
-<<<<<<< HEAD
-          {% endif %}
-          <button type="button" class="btn btn-danger" onclick="testPositive();" style="margin-left:5em; background-color: firebrick">Negative</button>
-          <script>
-            function negativeFunction() {
-              alert("Negative")
-              {% with negative=True %}
-              {% endwith %}
-              location.reload(true);
-            };
-          </script>
-=======
-          
->>>>>>> 9d42ac1b40c873d83019fc162e45bd294627d11b
+
             <!-- <pre id="trendText"><u><b>{{ text }}</b></u></pre> -->
 
             <div id="neg">
@@ -487,25 +459,8 @@
               </div>
               {% endfor %}
             </div>
-<<<<<<< HEAD
-          <button type="button" class="btn btn-secondary" onclick="testPositive();" style="margin-left:5em; background-color: #236D91">Neutral</button>
-          <script>
-            function neutralFunction() {
-              alert("Neutral")
-              {% with neutral=True %}
-              {% endwith %}
-              location.reload(true);
-            };
-          </script>
-          {% if neutral == True %}
-            <pre id="trendText"><u><b>{{ text }}</b></u></pre>
-
-            <div id="left">
-=======
-            <!-- <pre id="trendText"><u><b>{{ text }}</b></u></pre> -->
 
             <div id="neu">
->>>>>>> 9d42ac1b40c873d83019fc162e45bd294627d11b
               {% for tweet_data in neu_tweet_data_list %}
               <div class="panel panel-info">
 
