@@ -14,7 +14,11 @@ from bokeh.resources import INLINE
 from bokeh.models import TapTool, OpenURL
 from textblob import TextBlob
 
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
 from math import pi
+import math
 
 import pandas as pd
 
@@ -33,8 +37,8 @@ class HomeView(View):
     def get(self, request):
 
         #for is the search form in forms.py
-        response = HttpResponse("Cookie set")
-        response.set_cookie('java-tutorial', 'javatpoint.com')
+        # response = HttpResponse("Cookie set")
+        # response.set_cookie('java-tutorial', 'javatpoint.com')
         # return response
         form = SearchForm(request.GET)
         search_bool = False
@@ -178,10 +182,22 @@ class HomeView(View):
             x_coord = []
             y_coord = []
             xs = list(range(0,len(polar)))
-            #list of zeros to use as neg/pos separator
-            zeros = [0] * len(polar)
-            #list of halves
-            halves = [0.5] * len(polar)
+
+            # using nltk to get tf_idf values
+            complete_tweet_list = "";
+            for tweet_data in tweet_data_list:
+                complete_tweet_list += (" " + tweet_data['Tweet Text'])
+            tokenizer = nltk.RegexpTokenizer(r"\w+")
+            allWords = tokenizer.tokenize(complete_tweet_list);
+            # allWordDist = nltk.FreqDist(w.lower() for w in allWords)
+
+            stopWords = nltk.corpus.stopwords.words('english')
+            newStopWords = ['amp', '000']
+            stopWords.extend(newStopWords)
+            allWordDist = nltk.FreqDist(w.lower() for w in allWords if w.lower() not in stopWords)
+            mostCommon = allWordDist.most_common(50)
+            print(mostCommon[3:])
+
 
             source1 = ColumnDataSource(data=dict(
                     urls = tweets_urls,
