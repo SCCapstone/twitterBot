@@ -21,6 +21,12 @@ from math import pi
 import math
 
 import pandas as pd
+from wordcloud import WordCloud
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 from bokeh.io import output_file, show
 from bokeh.palettes import Category20c
@@ -183,21 +189,35 @@ class HomeView(View):
             y_coord = []
             xs = list(range(0,len(polar)))
 
-            # using nltk to get tf_idf values
+            # using nltk to generate stopWords
             complete_tweet_list = "";
             for tweet_data in tweet_data_list:
-                complete_tweet_list += (" " + tweet_data['Tweet Text'])
-            tokenizer = nltk.RegexpTokenizer(r"\w+")
-            allWords = tokenizer.tokenize(complete_tweet_list);
-            # allWordDist = nltk.FreqDist(w.lower() for w in allWords)
+                complete_tweet_list += (" " + tweet_data['Tweet Text'].lower())
 
             stopWords = nltk.corpus.stopwords.words('english')
-            newStopWords = ['amp', '000']
+            newStopWords = ['amp', '000', 'https', 'co']
             stopWords.extend(newStopWords)
-            allWordDist = nltk.FreqDist(w.lower() for w in allWords if w.lower() not in stopWords)
-            mostCommon = allWordDist.most_common(50)
-            print(mostCommon[3:])
+            stopWords.extend(search_text_list)
 
+            # get tf values
+            # tokenizer = nltk.RegexpTokenizer(r"\w+")
+            # allWords = tokenizer.tokenize(complete_tweet_list);
+            # print(allWords)
+            # allWordDist = nltk.FreqDist(w.lower() for w in allWords)
+            # allWordDist = nltk.FreqDist(w.lower() for w in allWords if w.lower() not in stopWords)
+            # mostCommon = allWordDist.most_common(50)
+            # print(mostCommon[3:])
+
+            # create wordCloud and set up to be displayed
+            wordcloud = WordCloud(width = 800, height = 800, background_color = 'white', stopwords=stopWords, min_font_size=10).generate(complete_tweet_list)
+            buf = BytesIO()
+            plt.figure(figsize = (8,8), facecolor = None)
+            plt.imshow(wordcloud)
+            plt.axis("off")
+            plt.tight_layout(pad = 0)
+            plt.savefig(buf, format='png', dpi=300)
+            image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8').replace('\n', '')
+            buf.close()
 
             source1 = ColumnDataSource(data=dict(
                     urls = tweets_urls,
@@ -252,20 +272,13 @@ class HomeView(View):
 
             plot3.wedge(x=-1, y=1, radius=0.7, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'), line_color="white", fill_color='color', legend='polarity', source=data)
 
-
-            #plot1.line(xs,zeros,line_width=4, color="red") # zeros line
-            #plot1.line(xs,polar,line_width=2, color="red") # polar line
-            #plot1.line(xs,halves,line_width=4, color="blue") # halves line
-            #plot1.line(xs,subj,line_width=2,  color="blue") # subj line
-            # plot1.line(xs,zeros,line_width=4, color="red") # zeros line
             plot1.vbar(x='xs',top='polar',width=0.5, color="#00acee", source=source1) # polar line
             plot2.vbar(x='xs',top='subj',width=0.5, color="#00acee", source=source2) # subj line
-            # plot1.line(xs,halves,line_width=4, color="blue") # halves line
-            # plot1.line(xs,subj,line_width=2,  color="blue") # subj line
             plot1.toolbar.active_drag = None
             plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
             plot2.toolbar.active_drag = None
             plot2.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
+            
             #assign graphs to a column structure
             col = column([plot1])
             col.sizing_mode = 'scale_width'
@@ -273,7 +286,7 @@ class HomeView(View):
             col2.sizing_mode = 'scale_width'
             col3 = column([plot3])
             col3.sizing_mode = 'scale_width'
-
+            #set up graphs to be sent to home page
             script1, div1 = components(col)
             script2, div2 = components(col2)
             script3, div3 = components(col3)
@@ -284,6 +297,7 @@ class HomeView(View):
             positive = False
             negative = False
             neutral = False
+            print(history)
 
             #containing items to be returned to html page
             context = {
@@ -308,6 +322,7 @@ class HomeView(View):
                 'positive': positive,
                 'negative': negative,
                 'neutral': neutral,
+                'image_base64': image_base64,
                 
             }
             # returning response and setting cookie
