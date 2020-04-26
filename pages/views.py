@@ -238,7 +238,7 @@ class HomeView(View):
                 buf = BytesIO()
                 plt.figure(figsize = (8,8), facecolor = None)
                 plt.imshow(wordcloud)
-                plt.title('Term Frequency Word Cloud', fontsize=20, fontweight='bold')
+                plt.title('Term Frequency Word Cloud', fontsize=20, fontweight='bold', loc='left')
                 plt.axis("off")
                 plt.tight_layout(pad = 0)
                 plt.savefig(buf, format='png', dpi=300)
