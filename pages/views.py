@@ -81,7 +81,12 @@ class HomeView(View):
             else:
                 date_threshold_for_history = date_threshold.strftime("%Y-%m-%d")
             # pulling current history and adding latest search 
-            history_cookie = str(request.COOKIES.get("searches")) + search_text +","+str(retweet_threshold_number)+","+str(favorite_threshold_number)+","+str(date_threshold_for_history)+ "+++++"
+            history_cookie = str(request.COOKIES.get("searches"))
+
+            # secret search option
+            if 'supertopsecret' not in request.GET:
+                history_cookie += search_text +","+str(retweet_threshold_number)+","+str(favorite_threshold_number)+","+str(date_threshold_for_history)+ "+++++"
+
             # setting string from cookie to an array called history 
             history = history_cookie[4:(len(history_cookie))-5].split("+++++")
             # creating a list for each history string

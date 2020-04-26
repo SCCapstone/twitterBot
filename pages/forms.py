@@ -47,5 +47,7 @@ class SearchForm(forms.Form):
             return data
         if data < date.today()-timedelta(days=7):
             raise forms.ValidationError('Enter a valid date! (no more than 7 days in the past)')
+        if data > date.today():
+            raise forms.ValidationError("Enter a valid date! (date can't be in the future)")
         return data
 

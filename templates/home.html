@@ -74,7 +74,9 @@
         {{ form.favorite_threshold.errors }}
         <input id="date_threshold" type="date" name="date_threshold" placeholder="mm/dd/yyyy hh:mm am (only up to 7 days in the past)" class="form-control mr-sm-0">
         {{ form.date_threshold.errors }}
+        <!-- two search buttons, one for secret search. has a name that if found in request.GET, it doesn't save to cookie -->
         <button id="search_submit" type="submit" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px; margin-bottom: 0px">Search</button>
+        <button id="search_submit" type="submit" name="supertopsecret" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px; margin-bottom: 0px">Secret Search</button>
       </form>
 
       <div style="display: block; text-align: center;">
@@ -91,11 +93,12 @@
                   <p><b>Warning: This website uses cookies to track search history for our users.</b></p>
                   <p> This is a tool for trend tracking on what people are currently tweeting! This app will show you the polarity (If what people are saying is positive or negative), giving you a better understanding of how the trend is being viewed and talked about by Twitter users.</p>
                   <ul style="text-align: center; list-style-position: inside;">
-                    <li>A Search Term is required for a serach to take place!</li>
+                    <li>A Search Term is required for a search to take place!</li>
                     <li>Search results are sorted by polarity in ascending order (Lowest to Highest)!</li>
                     <li>Retweet Threshold: Will only display tweets with a number of retweets greater than the number entered!</li>
                     <li>Favorite Threshold: Will only display tweets with a number of favorites greater than the number entered!</li>
-                    <li>Date: Allows you to search based on day up to one week in the past!</li>
+                    <li>Date: Will only display tweets starting from 7 days in the past and before this date! </li>
+                    <li>Secret Search: Use this button if you don't want your search to be saved to your history! </li>
                   </ul>
                 </div>
                 <div class="modal-footer">
@@ -177,7 +180,7 @@
 
                 {% for key, value in tweet_data.items %}
                   {% if key == 'Favorite Count' %}
-                    <b>{{ value }} </b>Likes
+                    <b>{{ value }} </b>Favorites
                   {% endif %}
                 {% endfor %}
 
