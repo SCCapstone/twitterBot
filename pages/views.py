@@ -1,19 +1,17 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import TemplateView, View, CreateView
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponse
-from .forms import CustomUserCreationForm, SearchForm
+from .forms import  SearchForm
 from bokeh.layouts import column
 from bokeh.plotting import *
 from bokeh.embed import components
 from bokeh.resources import INLINE
 from bokeh.models import TapTool, OpenURL
 from textblob import TextBlob
-
 import json
 
 import dateutil.parser
@@ -185,8 +183,8 @@ class HomeView(View):
                 #append the results to the coordinates list
                 for tweet_data in tweet_data_list:
                     blob = TextBlob(tweet_data['Tweet Text'])
-                    polar.append(blob.sentiment.polarity)
-                    subj.append(blob.sentiment.subjectivity)
+                    polar.append(round(blob.sentiment.polarity, 3))
+                    subj.append(round(blob.sentiment.subjectivity, 3))
                     request.session['polar'] = polar
                     request.session['subj'] = subj
 
@@ -244,13 +242,11 @@ class HomeView(View):
                 plt.savefig(buf, format='png', dpi=300)
                 image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8').replace('\n', '')
                 buf.close()
-
                 source1 = ColumnDataSource(data=dict(
                         urls = tweets_urls,
                         xs = xs,
                         polar = sorted(polar)
                     ))
-
                 #plot as multi line graph
                 plot1 = figure(
                     title='Polarity of Tweets',
@@ -301,9 +297,9 @@ class HomeView(View):
                 plot1.vbar(x='xs',top='polar',width=0.5, color="#00acee", source=source1) # polar line
                 plot2.vbar(x='xs',top='subj',width=0.5, color="#00acee", source=source2) # subj line
                 plot1.toolbar.active_drag = None
-                plot1.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
+                plot1.hover.tooltips = [("tweet", "$index"), ("value", "@polar"),]
                 plot2.toolbar.active_drag = None
-                plot2.hover.tooltips = [("tweet", "$index"), ("value", "$y"),]
+                plot2.hover.tooltips = [("tweet", "$index"), ("value", "@subj"),]
                 
                 #assign graphs to a column structure
                 col = column([plot1])
