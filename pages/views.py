@@ -14,6 +14,10 @@ from bokeh.resources import INLINE
 from bokeh.models import TapTool, OpenURL
 from textblob import TextBlob
 
+import json
+
+import dateutil.parser
+
 import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -71,12 +75,21 @@ class HomeView(View):
                 favorite_threshold_number = form.cleaned_data['favorite_threshold']
             if form.cleaned_data['date_threshold']:
                 date_threshold = form.cleaned_data['date_threshold']
-
+            # converting date_threshold to a string for the cookie
+            if date_threshold == None:
+                date_threshold_for_history = ""
+            else:
+                date_threshold_for_history = date_threshold.strftime("%Y-%m-%d")
             # pulling current history and adding latest search 
-            history_cookie = str(request.COOKIES.get("searches")) + search_text + "+++++"
+            history_cookie = str(request.COOKIES.get("searches")) + search_text +","+str(retweet_threshold_number)+","+str(favorite_threshold_number)+","+str(date_threshold_for_history)+ "+++++"
             # setting string from cookie to an array called history 
             history = history_cookie[4:(len(history_cookie))-5].split("+++++")
-            
+            # creating a list for each history string
+            history_list = [];
+            for entry in history:
+                # splitting them into fields
+                history_list.append(entry.split(','))
+
             #Tweepy Authentication
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
@@ -297,7 +310,7 @@ class HomeView(View):
             positive = False
             negative = False
             neutral = False
-            print(history)
+
 
             #containing items to be returned to html page
             context = {
@@ -318,7 +331,7 @@ class HomeView(View):
                 'div2': div2,
                 'script3': script3,
                 'div3': div3,
-                'history': history,
+                'history': history_list,
                 'positive': positive,
                 'negative': negative,
                 'neutral': neutral,

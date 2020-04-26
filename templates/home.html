@@ -556,7 +556,7 @@
     <div class="col-sm-5" style="margin-left: 0px">
       <form method="GET"  style="margin: 0; text-align: center;">
         {% csrf_token %}
-        <pre id="history" style="padding-bottom: 15px; padding-top: 14px"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input> • {% endfor %}</form>
+        <pre id="history" style="padding-bottom: 15px; padding-top: 14px"><i><b>History:</b></i>  {% for search in history %}<input id="search" type="submit" name="search" value="{{ search.0 }}" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px"></input><input type="hidden" name="retweet_threshold" value="{{ search.1 }}"/><input type="hidden" name="favorite_threshold" value="{{ search.2 }}"/><input type="hidden" name="date_threshold" value="{{ search.3 }}"/>• {% endfor %}</form>
         </pre>
     </div>
 
