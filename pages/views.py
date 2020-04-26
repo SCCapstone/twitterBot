@@ -1,3 +1,4 @@
+# required django imports 
 from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import TemplateView, View, CreateView
 from django.contrib.auth.decorators import login_required
@@ -6,33 +7,42 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.http import HttpResponse
 from .forms import  SearchForm
+
+# for bokeh charts
 from bokeh.layouts import column
 from bokeh.plotting import *
 from bokeh.embed import components
 from bokeh.resources import INLINE
 from bokeh.models import TapTool, OpenURL
-from textblob import TextBlob
-import json
 
+# to get polarity and sentiment
+from textblob import TextBlob
+
+# using this to parse dates for the cookies
 import dateutil.parser
 
+# using to get stopwords for word cloud
 import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
+
+# using for pie chart
 from math import pi
 import math
-
 import pandas as pd
+from bokeh.io import output_file, show
+from bokeh.palettes import Category20c
+from bokeh.transform import cumsum
+
+# all for wordcloud
 from wordcloud import WordCloud
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+# for encoding to base64 to pass to html
 from io import BytesIO
 import base64
 
-from bokeh.io import output_file, show
-from bokeh.palettes import Category20c
-from bokeh.transform import cumsum
 from pytz import timezone
 from datetime import datetime, timedelta
 import random, tweepy, sys
@@ -49,14 +59,13 @@ class HomeView(View):
             auth = tweepy.OAuthHandler('gD2XB4HhO4hQOFoc9OMSVIcMV', 'mS5GZ2eJaSIcJIxF5w9iRWx6sglfQzMGcbmiL6Rrrl3K125vYo')
             auth.set_access_token('1188574858571059200-BBWOHfZBmJu4IrrkpS90gFKgS04c8s', 'q2zccyrkuUr9rThgkZmsLtYPxhQoAK1gouwXUHJOKGiGR')
             api = tweepy.API(auth)
-            #for is the search form in forms.py
-            # response = HttpResponse("Cookie set")
-            # response.set_cookie('java-tutorial', 'javatpoint.com')
-            # return response
+            
+            #GET request 
             form = SearchForm(request.GET)
             search_bool = False
             history = ""
 
+            #check if the form is valid
             if form.is_valid():
 
                 #search is valid
@@ -140,6 +149,7 @@ class HomeView(View):
                     created_at = tweet_data.created_at - timedelta(hours=4)
 
                     #dict for holding all the data related to the tweet
+                    #we use this in home.html after sending it through the context
                     tweet_dict = {
                     'Tweet ID': tweet_data.id,
                     'Screen Name': tweet_data.user.screen_name,
@@ -160,7 +170,8 @@ class HomeView(View):
                     'tweetInListForm' : tweet_in_ListForm,
                     'tweetURL' : tweetURL,
                     }
-
+                    #this is used for filtering the tweets, we create these filtered lists in the python
+                    #then send it through the context to html to display these pages on button click
                     if round(TextBlob(tweet).sentiment.polarity, 2) > 0:
                         pos_tweet_data_list.append(tweet_dict)
                     elif round(TextBlob(tweet).sentiment.polarity, 2) < 0:
@@ -197,6 +208,7 @@ class HomeView(View):
                     sentiment_dict[tweet_data['Tweet Text']] = tweet_TB.sentiment.polarity
 
                 # For Polarity Pie Chart
+                # separates values into pos/neg/neutral counts
                 pos = 0
                 neg = 0
                 neutral = 0
@@ -222,17 +234,9 @@ class HomeView(View):
                 stopWords.extend(newStopWords)
                 stopWords.extend(search_text_list)
 
-                # get tf values
-                # tokenizer = nltk.RegexpTokenizer(r"\w+")
-                # allWords = tokenizer.tokenize(complete_tweet_list);
-                # print(allWords)
-                # allWordDist = nltk.FreqDist(w.lower() for w in allWords)
-                # allWordDist = nltk.FreqDist(w.lower() for w in allWords if w.lower() not in stopWords)
-                # mostCommon = allWordDist.most_common(50)
-                # print(mostCommon[3:])
-
                 # create wordCloud and set up to be displayed
                 wordcloud = WordCloud(width = 800, height = 800, background_color = 'white', stopwords=stopWords, min_font_size=10).generate(complete_tweet_list)
+                # use this is encode to base 64 and send through context to display on home
                 buf = BytesIO()
                 plt.figure(figsize = (8,8), facecolor = None)
                 plt.imshow(wordcloud)
@@ -242,12 +246,13 @@ class HomeView(View):
                 plt.savefig(buf, format='png', dpi=300)
                 image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8').replace('\n', '')
                 buf.close()
+                # creating this as a source to use for the bar chart
                 source1 = ColumnDataSource(data=dict(
                         urls = tweets_urls,
                         xs = xs,
                         polar = sorted(polar)
                     ))
-                #plot as multi line graph
+                # plot as multi line graph
                 plot1 = figure(
                     title='Polarity of Tweets',
                     x_axis_label='Tweets',
@@ -257,15 +262,16 @@ class HomeView(View):
                     sizing_mode='scale_width',
                     tools='tap, pan, zoom_in, hover'
                     )
+                # setting up tools so that on click, it takes you to the tweet
                 taptool = plot1.select(type=TapTool)
                 taptool.callback = OpenURL(url="@urls")
 
+                # setting up plot2 for subj bar chart
                 source2 = ColumnDataSource(data=dict(
                         urls = tweets_urls,
                         xs = xs,
                         subj = sorted(subj)
                     ))
-
                 plot2 = figure(
                     title='Subjectivity of Tweets',
                     x_axis_label='Tweets',
@@ -277,8 +283,8 @@ class HomeView(View):
                     )
                 taptool2 = plot2.select(type=TapTool)
                 taptool2.callback = OpenURL(url="@urls")
+                # setting up pie chart graph
                 x = { 'Positive': pos, 'Negative': neg, 'Neutral': neutral}
-
                 data = pd.Series(x).reset_index(name='value').rename(columns={'index':'polarity'})
                 data['angle'] = data['value']/data['value'].sum() * 2*pi
                 data['color'] = ('#00acee', 'firebrick', '#D6EDF8')
@@ -292,6 +298,7 @@ class HomeView(View):
                     tools="hover, pan", 
                     tooltips="@polarity: @value")
 
+                # actually creating the plots and their tooltips
                 plot3.wedge(x=-1, y=1, radius=0.7, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'), line_color="white", fill_color='color', legend='polarity', source=data)
 
                 plot1.vbar(x='xs',top='polar',width=0.5, color="#00acee", source=source1) # polar line
@@ -313,13 +320,15 @@ class HomeView(View):
                 script2, div2 = components(col2)
                 script3, div3 = components(col3)
 
+                # nothing was searched
                 if len(tweet_data_list) == 0:
                     search_bool = False
 
+                # set up these values for the filtering later on
+                # pass through context to give to home.html buttons
                 positive = False
                 negative = False
                 neutral = False
-
 
                 #containing items to be returned to html page
                 context = {
