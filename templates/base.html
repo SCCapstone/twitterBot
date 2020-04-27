@@ -66,7 +66,7 @@
 	                    <p>Are you sure you want to delete cookies?</p>
 	                  </div>
 	                  <div class="modal-footer">
-	                    <button type="button" class="btn btn-info" data-dismiss="modal" onclick="delete_cookies()">Delete Cookies.</button>
+	                    <button type="button" class="btn btn-info" data-dismiss="modal" onclick="delete_cookies()" data-toggle="modal" data-target="#confirmModal">Delete Cookies.</button>
 	                    <button type="button" class="btn btn-info" data-dismiss="modal">No thanks.</button>
 	                  </div>
 	                </div>
@@ -74,6 +74,21 @@
 	            </div>
 	          </form>
 	        </div>
+					<div class="modal fade" id="confirmModal" role="dialog">
+						<div class="modal-dialog modal-sm">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title">Delete Cookies</h4>
+								</div>
+								<div class="modal-body">
+									<p>Cookies have been deleted.</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-info" data-dismiss="modal">Okay!</button>
+								</div>
+							</div>
+						</div>
+					</div>
 	    {% endif %}
 		<!-- active nav bar items -->
 		<li class="nav-item {{ home }}"><a class="nav-link {{ status0 }}" href="{% url 'home' %}" style="color: #00acee">Home</a><li>
