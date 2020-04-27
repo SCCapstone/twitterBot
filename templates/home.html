@@ -61,7 +61,9 @@
         <h1 style="text-align: center; color: #00acee; font-family: 'Courier New', Times, monospace;">tweetBot.</h1>
       {% endif %}
 
+      <!-- Search Bars -->
       <form method="GET" style="margin: 0; text-align: center;">
+        <!-- Term Search Bar -->
         {{ rate_limit_error }}
         {% csrf_token %}
         {% if form.search.errors %}
@@ -69,12 +71,16 @@
         {% else %}
           <input id="search" type="text" name="search" placeholder="Search Keyword" class="form-control mr-sm-0">
         {% endif %}
+        <!-- Amount of Tweets Search Bar -->
         <input id="tweet_number" type="number" name="tweet_number" class="form-control mr-sm-0" placeholder="Number of tweets (1-100)" min="1" max="100">
         {{ form.tweet_number.errors }}
+        <!-- Retweet Search Bar -->
         <input id="retweet_threshold" type="number" name="retweet_threshold" placeholder="Retweet Threshold (must be positive)" class="form-control mr-sm-0" min="1">
         {{ form.retweet_threshold.errors }}
+        <!-- Favorite Search Bar -->
         <input id="favorite_threshold" type="number" name="favorite_threshold" placeholder="Favorite Threshold (must be positive)" class="form-control mr-sm-0" min="1">
         {{ form.favorite_threshold.errors }}
+        <!-- Date Search Bar -->
         <input id="date_threshold" type="date" name="date_threshold" placeholder="mm/dd/yyyy hh:mm am (only up to 7 days in the past)" class="form-control mr-sm-0">
         {{ form.date_threshold.errors }}
         <!-- two search buttons, one for secret search. has a name that if found in request.GET, it doesn't save to cookie -->
@@ -82,6 +88,7 @@
         <button id="search_submit" type="submit" name="supertopsecret" class="btn aqua-gradient btn-rounded btn-sm my-sm-3" style="padding-bottom: 2px; padding-top: 2px; margin-bottom: 0px">Secret Search</button>
       </form>
 
+      <!-- Information Icon Button and Modal -->
       <div style="display: block; text-align: center;">
         <button id="info1" data-toggle="modal" data-target="#theNewModal"><b>&#9432;</b></button>
           <!-- Search Information Modal -->
@@ -134,15 +141,18 @@
           <pre id="trendText"><u><b>{{ text }}</b></u></pre>
 
           <div id="left">
+            <!-- For loop printing tweets individually -->
             {% for tweet_data in tweet_data_list %}
             <div class="panel panel-info">
 
               <div class="panel-heading">
+                <!-- User Name -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'User Name' %}
                     <b>{{ value }} </b>
                   {% endif %}
                 {% endfor %}
+                <!-- Screen Name -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'Screen Name' %}
                     <a href="https://twitter.com/{{value}}" target="_blank"><i>@{{ value }}</i></a>
@@ -151,6 +161,7 @@
               </div>
 
               <div class="panel-body">
+                <!-- Tweet text with bolding -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'tweetInListForm' %}
                     {% for word in value %}
@@ -167,6 +178,7 @@
 
                 <br>
 
+                <!-- URL to actual tweet -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'tweetURL' %}
                     <a href="{{ value }}" target="_blank">View tweet on Twitter here.</a>
@@ -175,12 +187,14 @@
               </div>
 
               <div class="panel-footer">
+                <!-- Retween Number -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'Retweet Count' %}
                     <b>{{ value }} </b>Retweets
                   {% endif %}
                 {% endfor %}
 
+                <!-- Favorite Number -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'Favorite Count' %}
                     <b>{{ value }} </b>Favorites
@@ -189,6 +203,7 @@
 
                 <br>
 
+                <!-- Polarity -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'Tweet Polarity' %}
                     {% if value > 0 %}
@@ -201,6 +216,7 @@
                   {% endif %}
                 {% endfor %}
 
+                <!-- Subjectivity -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'Tweet Subjectivity' %}
                     <b>{{ value }} </b>Subjectivity
@@ -209,6 +225,7 @@
 
                 <br>
 
+                <!-- Time Tweet was created -->
                 {% for key, value in tweet_data.items %}
                   {% if key == 'Tweet Created At' %}
                     <i>{{ value }} </i>
@@ -371,8 +388,7 @@
               {% endfor %}
             </div>
 
-            <!-- <pre id="trendText"><u><b>{{ text }}</b></u></pre> -->
-
+            <!-- Reprints tweets for negative polarity only -->
             <div id="neg">
               {% for tweet_data in neg_tweet_data_list %}
               <div class="panel panel-info">
@@ -460,6 +476,7 @@
               {% endfor %}
             </div>
 
+            <!-- Reprints to Neutral only -->
             <div id="neu">
               {% for tweet_data in neu_tweet_data_list %}
               <div class="panel panel-info">
