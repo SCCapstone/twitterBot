@@ -165,7 +165,7 @@
                 {% for key, value in tweet_data.items %}
                   {% if key == 'tweetInListForm' %}
                     {% for word in value %}
-                      {% if word|lower == text|lower or text|lower in word|lower %}
+                      {% if word|lower == text|lower or text|lower in word|lower or word|lower in searchTextList %}
                         <b>{{ word }}</b>
                       {% elif "https://t.co" in word|lower %}
                         <a href="{{ word }}" target="_blank">{{ word }}</a>

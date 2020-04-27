@@ -75,6 +75,9 @@ class HomeView(View):
                 search_text = form.cleaned_data['search']
                 search_text_list = search_text.split()
 
+                for i in range(len(search_text_list)):
+                    search_text_list[i] = search_text_list[i].lower()
+
                 #Advanced Search Input Here
                 #declare variables because not all fields of the form are required
                 retweet_threshold_number = 0
@@ -335,6 +338,7 @@ class HomeView(View):
                     'title': 'Home',
                     'status0': 'active',
                     'text': search_text,
+                    'searchTextList' : search_text_list,
                     'searchBool' : search_bool,
                     'tweet_data_list': tweet_data_list,
                     'pos_tweet_data_list': pos_tweet_data_list,
